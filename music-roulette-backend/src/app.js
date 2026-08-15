@@ -12,7 +12,7 @@ const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ limit: "1mb" }));
 
 const allowedOrigins = (process.env.CORS_ORIGINS || "").split(",").filter(Boolean);
@@ -55,7 +55,6 @@ app.get("/render-alive", (req, res) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Server Status: Online</title>
-            <meta http-equiv="refresh" content="1">
             <style>
                 body{font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background:#121212;color:#fff}
                 .card{text-align:center;padding:40px 50px;background:#1e1e1e;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.4);border:1px solid #333}
@@ -71,6 +70,20 @@ app.get("/render-alive", (req, res) => {
                 <div class="msg">Backend server is up and running!</div>
                 <div id="clock">${timeStr}</div>
             </div>
+            <script>
+                const clockEl = document.getElementById('clock');
+                const base = new Date('${now.toISOString()}');
+                const t0 = Date.now();
+                function tick(){
+                    const elapsed = Date.now() - t0;
+                    const d = new Date(base.getTime() + elapsed);
+                    const pad = n => String(n).padStart(2,'0');
+                    const padMs = n => String(n).padStart(3,'0');
+                    clockEl.textContent = pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+'.'+padMs(d.getMilliseconds());
+                    requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+            </script>
         </body>
         </html>
     `;
