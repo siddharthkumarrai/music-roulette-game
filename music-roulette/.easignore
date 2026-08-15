@@ -1,0 +1,7 @@
+node_modules/
+.expo/
+dist/
+.git/
+android/
+ios/
+audio_cache/
