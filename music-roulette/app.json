@@ -24,6 +24,12 @@
     "plugins": [
       "expo-asset",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e1643225-d657-4054-b693-c601289436d0"
+      }
+    },
+    "owner": "siddharthkumarrais-team"
   }
 }
