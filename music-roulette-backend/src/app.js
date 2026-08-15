@@ -44,6 +44,7 @@ app.get("/health", (req, res) => res.json({ status: "ok", time: new Date().toISO
 // RENDER.COM HEALTH CHECK ROUTE (Server ko zinda rakhne ke liye)
 // =======================================================
 app.get("/render-alive", (req, res) => {
+    res.removeHeader("Content-Security-Policy");
     const htmlResponse = `
         <!DOCTYPE html>
         <html lang="en">
