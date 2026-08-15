@@ -37,6 +37,7 @@ const apiLimiter = rateLimit({
 });
 app.use("/api", apiLimiter);
 
+app.get("/", (req, res) => res.json({ status: "ok" }));
 app.get("/health", (req, res) => res.json({ status: "ok", time: new Date().toISOString() }));
 
 // =======================================================
