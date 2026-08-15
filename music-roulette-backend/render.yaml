@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: music-roulette-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 30d
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: CRON_CHECK_INTERVAL_MINUTES
+        value: "60"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: YOUTUBE_COOKIES_BASE64
+        sync: false

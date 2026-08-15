@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.example
+audio_cache
+tools
+*.log
+.git
+.gitignore
+Dockerfile
+docker-compose.yml
+render.yaml
+README.md
