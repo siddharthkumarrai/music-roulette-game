@@ -24,6 +24,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#12111A"
+      },
+      "runtimeVersion": {
+        "policy": "appVersion"
       }
     },
     "plugins": [
@@ -34,6 +37,9 @@
       "eas": {
         "projectId": "1e56ea31-9bad-4dc6-a022-5c2b55f035b2"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/1e56ea31-9bad-4dc6-a022-5c2b55f035b2"
     }
   }
 }

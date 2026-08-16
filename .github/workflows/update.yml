@@ -1,0 +1,34 @@
+name: OTA Update
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "music-roulette/**"
+
+jobs:
+  update:
+    name: Publish OTA Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup EAS
+        uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Install dependencies
+        working-directory: music-roulette
+        run: npm ci
+
+      - name: Publish OTA update
+        working-directory: music-roulette
+        run: eas update --auto --branch production
