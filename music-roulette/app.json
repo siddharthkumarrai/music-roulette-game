@@ -15,6 +15,10 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "ios": {
+      "bundleIdentifier": "com.siddharthkumarrai.musicroulette",
+      "supportsTablet": false
+    },
     "android": {
       "package": "com.siddharthkumarrai.musicroulette",
       "adaptiveIcon": {
