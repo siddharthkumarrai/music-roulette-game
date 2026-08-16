@@ -90,6 +90,7 @@ async function extractMetadata(videoId) {
     const { stdout } = await execFileAsync(YTDLP_PATH, [
       "--no-download", "--print-json", "--no-playlist",
       "--remote-components", "ejs:github",
+      "--js-runtimes", "deno",
       ...cookiesArgs, url,
     ], { timeout: 45000 });
 
@@ -159,15 +160,17 @@ function runYtdlp(args, timeoutMs = 90000) {
 
 const COMMON_ARGS = [
   "--remote-components", "ejs:github",
+  "--js-runtimes", "deno",
   "--no-playlist", "--no-overwrites",
   "--socket-timeout", "30", "--retries", "3",
   "--ffmpeg-location", FFMPEG_PATH,
 ];
 
 const FORMAT_STRATEGIES = [
+  { args: ["--extractor-args", "youtube:player_client=ios", "-f", "bestaudio/best"], label: "ios" },
+  { args: ["--extractor-args", "youtube:player_client=tv_embedded", "-f", "bestaudio/best"], label: "tv_embedded" },
   { args: ["--extractor-args", "youtube:player_client=mweb", "-f", "bestaudio/best"], label: "mweb" },
   { args: ["-f", "bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio"], label: "bestaudio m4a/mp3" },
-  { args: ["-f", "bestaudio"], label: "bestaudio" },
   { args: ["--extractor-args", "youtube:player_client=web", "-f", "bestaudio/best"], label: "web" },
   { args: ["--extractor-args", "youtube:player_client=android", "-f", "bestaudio/best"], label: "android" },
   { args: [], label: "no format (auto)" },

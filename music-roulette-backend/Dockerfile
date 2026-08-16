@@ -11,17 +11,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
+RUN curl -fsSL https://github.com/denoland/deno/releases/latest/download/deno-x86_64-unknown-linux-gnu.zip -o /tmp/deno.zip \
+    && unzip /tmp/deno.zip -d /usr/local/bin \
+    && chmod +x /usr/local/bin/deno \
+    && deno --version \
+    && rm /tmp/deno.zip
+
 RUN curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp \
     && chmod a+rx /usr/local/bin/yt-dlp \
     && yt-dlp --version
-
-RUN curl -fsSL https://deno.land/install.sh | sh \
-    && DENO_INSTALL="/root/.deno" \
-    && echo "export DENO_INSTALL=$DENO_INSTALL" >> /etc/profile \
-    && echo "export PATH=$DENO_INSTALL/bin:\$PATH" >> /etc/profile
-
-ENV DENO_INSTALL=/root/.deno
-ENV PATH=/root/.deno/bin:$PATH
 
 COPY package*.json ./
 RUN npm ci --omit=dev
@@ -32,6 +30,8 @@ RUN mkdir -p /tmp/audio_workdir /app/tools
 
 ENV NODE_ENV=production
 ENV TMPDIR=/tmp/audio_workdir
+ENV DENO_INSTALL=/usr/local/bin
+ENV PATH=/usr/local/bin:$PATH
 
 EXPOSE 3000
 
