@@ -159,7 +159,6 @@ function runYtdlp(args, timeoutMs = 90000) {
 
 const COMMON_ARGS = [
   "--remote-components", "ejs:github",
-  "--js-runtimes", "node",
   "--no-playlist", "--no-overwrites",
   "--socket-timeout", "30", "--retries", "3",
   "--ffmpeg-location", FFMPEG_PATH,

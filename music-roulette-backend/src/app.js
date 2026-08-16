@@ -33,9 +33,10 @@ if (process.env.NODE_ENV !== "test") {
 // grows beyond a handful of private groups.
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
+  max: 500,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => req.path.startsWith("/audio/"),
 });
 app.use("/api", apiLimiter);
 

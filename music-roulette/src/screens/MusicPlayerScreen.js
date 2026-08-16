@@ -21,7 +21,7 @@ const MIN_REACTION_LENGTH = 20;
 const LISTEN_THRESHOLD = 0.9;
 const SEEK_GUARD_SECONDS = 2;
 const TICK_INTERVAL_MS = 1000;
-const POLL_INTERVAL_MS = 2000;
+const POLL_INTERVAL_MS = 5000;
 
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
