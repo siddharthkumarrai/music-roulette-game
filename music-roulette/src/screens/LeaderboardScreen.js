@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 
 const TABS = [
@@ -42,6 +43,7 @@ function formatDate(dateStr) {
 }
 
 export default function LeaderboardScreen({ route }) {
+  const insets = useSafeAreaInsets();
   const { groupId } = route.params;
   const [tab, setTab] = useState("weekly");
   const [leaderboard, setLeaderboard] = useState([]);
@@ -135,6 +137,7 @@ export default function LeaderboardScreen({ route }) {
   if (tab === "winners") {
     return (
       <View style={styles.container}>
+        <View style={{ paddingTop: insets.top }}>
         <Text style={styles.title}>Weekly Winners</Text>
         <Text style={styles.subtitle}>
           Most ratings received on your songs each week wins
@@ -178,12 +181,14 @@ export default function LeaderboardScreen({ route }) {
             </View>
           }
         />
+        </View>
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
+      <View style={{ paddingTop: insets.top }}>
       <Text style={styles.title}>Leaderboard</Text>
 
       {group && tab === "weekly" && (
@@ -235,6 +240,7 @@ export default function LeaderboardScreen({ route }) {
           </View>
         }
       />
+      </View>
     </View>
   );
 }

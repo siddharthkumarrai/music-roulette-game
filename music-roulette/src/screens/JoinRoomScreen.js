@@ -1,8 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 
 export default function JoinRoomScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [code, setCode] = useState("");
   const [joining, setJoining] = useState(false);
 
@@ -23,7 +34,11 @@ export default function JoinRoomScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 24, paddingTop: insets.top, paddingBottom: insets.bottom }}>
       <Text style={styles.title}>Join a Room</Text>
       <Text style={styles.subtitle}>Ask a friend in the room for their 6-character invite code.</Text>
 
@@ -40,7 +55,8 @@ export default function JoinRoomScreen({ navigation }) {
       <TouchableOpacity style={styles.btn} onPress={handleJoin} disabled={joining}>
         <Text style={styles.btnText}>{joining ? "Joining..." : "Join Room"}</Text>
       </TouchableOpacity>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 

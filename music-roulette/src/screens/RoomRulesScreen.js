@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 
 export default function RoomRulesScreen({ route }) {
+  const insets = useSafeAreaInsets();
   const { groupId } = route.params;
   const [group, setGroup] = useState(null);
 
@@ -24,7 +26,7 @@ export default function RoomRulesScreen({ route }) {
   const s = group.settings;
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 20 }}>
+    <ScrollView style={styles.container} contentContainerStyle={{ padding: 20, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 20 }}>
       <Text style={styles.heading}>How This Room Works</Text>
 
       <View style={styles.card}>

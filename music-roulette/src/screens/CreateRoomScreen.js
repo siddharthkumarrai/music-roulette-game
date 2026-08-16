@@ -7,12 +7,16 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 
 const DEADLINE_OPTIONS = [18, 19, 20, 21, 22];
 
 export default function CreateRoomScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const [name, setName] = useState("");
   const [maxMembers, setMaxMembers] = useState("6");
   const [deadlineHour, setDeadlineHour] = useState(20);
@@ -45,7 +49,11 @@ export default function CreateRoomScreen({ navigation }) {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 24 }}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 24, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 }}>
       <Text style={styles.title}>Create a Room</Text>
       <Text style={styles.subtitle}>
         Any number of people can join — pick a size that fits your group.
@@ -88,7 +96,8 @@ export default function CreateRoomScreen({ navigation }) {
       <TouchableOpacity style={styles.createBtn} onPress={handleCreate} disabled={creating}>
         <Text style={styles.createBtnText}>{creating ? "Creating..." : "Create Room"}</Text>
       </TouchableOpacity>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -9,9 +9,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "../context/AuthContext";
 
 export default function RegisterScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const { register } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,6 +44,7 @@ export default function RegisterScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
+      <View style={{ paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 }}>
       <Text style={styles.title}>🎵 Create Account</Text>
       <Text style={styles.subtitle}>Join or start your own listening rooms</Text>
 
@@ -77,6 +80,7 @@ export default function RegisterScreen({ navigation }) {
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
         <Text style={styles.link}>Already have an account? Log in</Text>
       </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 }

@@ -7,16 +7,12 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
-  Platform,
   Image,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Constants from "expo-constants";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
-
-const TOP_PAD = (Constants.statusBarHeight || 44) + 16;
 
 export default function RoomsListScreen({ navigation }) {
   const { user, logout } = useAuth();
@@ -55,8 +51,8 @@ export default function RoomsListScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.header, { paddingTop: TOP_PAD }]}>
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.hello}>Hey {user?.name} 👋</Text>
           <Text style={styles.sub}>Your listening rooms</Text>
@@ -109,11 +105,11 @@ export default function RoomsListScreen({ navigation }) {
         contentContainerStyle={{
           padding: 20,
           flexGrow: 1,
-          paddingBottom: 120,
+          paddingBottom: 100,
         }}
       />
 
-      <View style={[styles.footerBtns, { paddingBottom: insets.bottom + 12 }]}>
+      <View style={[styles.footerBtns, { paddingBottom: Math.max(insets.bottom, 16) + 8 }]}>
         <TouchableOpacity
           style={[styles.footerBtn, styles.footerBtnGhost]}
           onPress={() => navigation.navigate("JoinRoom")}
@@ -141,6 +137,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-start",
     paddingHorizontal: 20,
+    paddingTop: 16,
     paddingBottom: 20,
   },
   headerLeft: { flex: 1, marginRight: 12 },
@@ -196,7 +193,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     paddingHorizontal: 20,
+    paddingTop: 12,
     backgroundColor: "#12111A",
+    borderTopWidth: 1,
+    borderTopColor: "#1E1C2A",
   },
   footerBtn: {
     flex: 1,

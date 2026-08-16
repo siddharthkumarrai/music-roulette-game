@@ -10,6 +10,8 @@ import {
   RefreshControl,
   Image,
   ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -167,6 +169,11 @@ export default function RoomScreen({ route, navigation }) {
   const isPastDeadline = timeLeft.hours === 0 && timeLeft.minutes === 0;
 
   return (
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 88 : 0}
+    >
     <View style={styles.container}>
       <FlatList
         data={quest}
@@ -357,6 +364,7 @@ export default function RoomScreen({ route, navigation }) {
         </TouchableOpacity>
       </View>
     </View>
+    </KeyboardAvoidingView>
   );
 }
 

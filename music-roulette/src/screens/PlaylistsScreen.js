@@ -9,10 +9,9 @@ import {
   Image,
   ActivityIndicator,
   AppState,
-  Platform,
 } from "react-native";
 import { Audio } from "expo-av";
-import Constants from "expo-constants";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
 import PlaylistItem from "../components/PlaylistItem";
@@ -27,6 +26,7 @@ function formatTime(seconds) {
 export default function PlaylistsScreen({ route, navigation }) {
   const { groupId } = route.params;
   const { user } = useAuth();
+  const insets = useSafeAreaInsets();
 
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -235,7 +235,7 @@ export default function PlaylistsScreen({ route, navigation }) {
       />
 
       {currentSong && (
-        <View style={styles.miniPlayer}>
+        <View style={[styles.miniPlayer, { paddingBottom: insets.bottom + 8 }]}>
           <TouchableOpacity style={styles.miniPlayerContent} onPress={() => {}}>
             {currentSong.thumbnailUrl ? (
               <Image source={{ uri: currentSong.thumbnailUrl }} style={styles.miniThumb} />
@@ -327,8 +327,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
-    paddingVertical: 10,
-        paddingBottom: Platform.OS === "ios" ? 28 : 12,
+    paddingTop: 10,
   },
   miniPlayerContent: {
     flex: 1,

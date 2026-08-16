@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Share, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
 
 export default function RoomSettingsScreen({ route }) {
+  const insets = useSafeAreaInsets();
   const { groupId } = route.params;
   const { user } = useAuth();
   const [group, setGroup] = useState(null);
@@ -26,7 +28,7 @@ export default function RoomSettingsScreen({ route }) {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ padding: 20 }}>
+    <ScrollView style={styles.container} contentContainerStyle={{ padding: 20, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 20 }}>
       <View style={styles.codeCard}>
         <Text style={styles.codeLabel}>Invite Code</Text>
         <Text style={styles.code}>{group.inviteCode}</Text>

@@ -9,9 +9,11 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "../context/AuthContext";
 
 export default function LoginScreen({ navigation }) {
+  const insets = useSafeAreaInsets();
   const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +39,7 @@ export default function LoginScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
+      <View style={{ paddingTop: insets.top + 20, paddingBottom: insets.bottom + 20 }}>
       <Text style={styles.title}>🎵 Music Roulette</Text>
       <Text style={styles.subtitle}>Log in to your rooms</Text>
 
@@ -65,6 +68,7 @@ export default function LoginScreen({ navigation }) {
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
         <Text style={styles.link}>New here? Create an account</Text>
       </TouchableOpacity>
+      </View>
     </KeyboardAvoidingView>
   );
 }
