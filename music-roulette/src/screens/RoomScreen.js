@@ -63,6 +63,7 @@ export default function RoomScreen({ route, navigation }) {
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
   const [submittedVideoId, setSubmittedVideoId] = useState(null);
+  const [mySongAudioReady, setMySongAudioReady] = useState(false);
   const metaRefreshTimer = useRef(null);
 
   const loadData = useCallback(async () => {
@@ -96,6 +97,27 @@ export default function RoomScreen({ route, navigation }) {
     const timer = setInterval(update, 60000);
     return () => clearInterval(timer);
   }, [group]);
+
+  useEffect(() => {
+    if (!mySong || mySong.audioUrl || mySong.streamReady) {
+      setMySongAudioReady(true);
+      return;
+    }
+    setMySongAudioReady(false);
+    let pollCount = 0;
+    const poll = setInterval(async () => {
+      pollCount++;
+      if (pollCount > 30) { clearInterval(poll); return; }
+      try {
+        const { data } = await api.get(`/audio/${mySong.youtubeVideoId}/status`);
+        if (data.streamReady || data.audioUrl) {
+          setMySongAudioReady(true);
+          clearInterval(poll);
+        }
+      } catch {}
+    }, 4000);
+    return () => clearInterval(poll);
+  }, [mySong?._id, mySong?.audioUrl, mySong?.streamReady]);
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -266,7 +288,7 @@ export default function RoomScreen({ route, navigation }) {
                     </Text>
                   </View>
                 </View>
-                {!mySong.streamReady && !mySong.audioUrl ? (
+                {!mySongAudioReady ? (
                   <View style={styles.processingRow}>
                     <ActivityIndicator color="#B98CFF" size="small" />
                     <Text style={styles.processingText}>Processing audio...</Text>

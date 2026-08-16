@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from "react-native";
+import { api } from "../config/api";
 
 function formatDuration(seconds) {
   if (!seconds || seconds <= 0) return "0:00";
@@ -9,7 +10,23 @@ function formatDuration(seconds) {
 }
 
 export default function PlaylistItem({ song, isPlaying, isLoading, onPress }) {
-  const hasAudio = !!song.audioUrl || song.streamReady;
+  const [audioReady, setAudioReady] = useState(!!song.audioUrl || !!song.streamReady);
+  const pollRef = useRef(null);
+
+  useEffect(() => {
+    if (audioReady) return;
+    pollRef.current = setInterval(async () => {
+      try {
+        const { data } = await api.get(`/audio/${song.youtubeVideoId}/status`);
+        if (data.streamReady || data.audioUrl) {
+          setAudioReady(true);
+          clearInterval(pollRef.current);
+          pollRef.current = null;
+        }
+      } catch {}
+    }, 5000);
+    return () => { if (pollRef.current) clearInterval(pollRef.current); };
+  }, [song.youtubeVideoId, audioReady]);
 
   return (
     <TouchableOpacity
@@ -36,7 +53,7 @@ export default function PlaylistItem({ song, isPlaying, isLoading, onPress }) {
           {song.durationSeconds > 0 && (
             <Text style={styles.duration}>{formatDuration(song.durationSeconds)}</Text>
           )}
-          {!hasAudio && (
+          {!audioReady && (
             <Text style={styles.processing}>Processing...</Text>
           )}
           {song.dropDate && (
