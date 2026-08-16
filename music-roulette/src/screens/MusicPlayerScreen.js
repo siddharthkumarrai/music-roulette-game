@@ -21,7 +21,8 @@ const MIN_REACTION_LENGTH = 20;
 const LISTEN_THRESHOLD = 0.9;
 const SEEK_GUARD_SECONDS = 2;
 const TICK_INTERVAL_MS = 1000;
-const POLL_INTERVAL_MS = 5000;
+const POLL_INTERVAL_MS = 4000;
+const MAX_AUTO_RETRIES = 3;
 
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
@@ -71,6 +72,8 @@ export default function MusicPlayerScreen({ route, navigation }) {
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [autoRetryCount, setAutoRetryCount] = useState(0);
+  const [statusMessage, setStatusMessage] = useState("Preparing your song...");
 
   const audioUrl = resolvedAudioUrl;
 
@@ -82,31 +85,45 @@ export default function MusicPlayerScreen({ route, navigation }) {
       try {
         const { data } = await api.get(`/audio/${song.youtubeVideoId}/status`);
         setExtractionProgress(data.progress);
-        if (data.title && !liveTitle) setLiveTitle(data.title);
-        if (data.artist && !liveArtist) setLiveArtist(data.artist);
-        if (data.thumbnailUrl && !liveThumb) setLiveThumb(data.thumbnailUrl);
         if (data.title) setLiveTitle(data.title);
         if (data.artist) setLiveArtist(data.artist);
         if (data.thumbnailUrl) setLiveThumb(data.thumbnailUrl);
+        if (data.durationSeconds) setDuration(data.durationSeconds);
 
         if (data.progress?.state === "done" || data.streamReady || data.audioUrl) {
           clearInterval(pollTimer.current);
           pollTimer.current = null;
           setAudioReady(true);
           if (data.audioUrl) setResolvedAudioUrl(data.audioUrl);
-          if (data.durationSeconds) setDuration(data.durationSeconds);
           return;
         }
+
         if (data.progress?.state === "failed") {
           failedCount++;
-          if (failedCount >= 3) {
-            clearInterval(pollTimer.current);
-            pollTimer.current = null;
-            setLoadError(true);
+          if (failedCount >= 2) {
+            setAutoRetryCount((prev) => {
+              const next = prev + 1;
+              if (next >= MAX_AUTO_RETRIES) {
+                clearInterval(pollTimer.current);
+                pollTimer.current = null;
+                setLoadError(true);
+              } else {
+                setStatusMessage(`Retrying... attempt ${next + 1} of ${MAX_AUTO_RETRIES}`);
+                api.post(`/audio/${song.youtubeVideoId}/retry`).catch(() => {});
+              }
+              return next;
+            });
+            failedCount = 0;
           }
           return;
         }
-        failedCount = 0;
+
+        if (data.progress?.state === "extracting" || data.progress?.state === "converting" || data.progress?.state === "uploading") {
+          failedCount = 0;
+          if (data.progress.state === "extracting") setStatusMessage(`Extracting audio... ${data.progress.percent || 0}%`);
+          else if (data.progress.state === "converting") setStatusMessage(`Converting to MP3... ${data.progress.percent || 0}%`);
+          else if (data.progress.state === "uploading") setStatusMessage("Uploading to cloud...");
+        }
       } catch {}
     }, POLL_INTERVAL_MS);
 
@@ -116,9 +133,11 @@ export default function MusicPlayerScreen({ route, navigation }) {
   useEffect(() => {
     if (!audioReady) return;
     if (!audioUrl) {
-      setLoading(false);
-      setLoadError(true);
-      return;
+      const waitTimer = setTimeout(() => {
+        setLoading(false);
+        setLoadError(true);
+      }, 5000);
+      return () => clearTimeout(waitTimer);
     }
 
     let mounted = true;
@@ -325,12 +344,14 @@ export default function MusicPlayerScreen({ route, navigation }) {
         )}
         <Text style={styles.trackTitle} numberOfLines={1}>{displayTitle}</Text>
         <Text style={styles.trackArtist} numberOfLines={1}>{displayArtist}</Text>
-        <ActivityIndicator color="#B98CFF" style={{ marginTop: 12 }} />
-        <Text style={{ color: "#9C97AE", fontSize: 13, marginTop: 8 }}>{getExtractionLabel(extractionProgress)}</Text>
+        <ActivityIndicator color="#B98CFF" style={{ marginTop: 16 }} size="large" />
+        <Text style={{ color: "#B98CFF", fontSize: 14, fontWeight: "600", marginTop: 12, textAlign: "center" }}>{statusMessage}</Text>
         <View style={styles.progressBarOuter}>
           <View style={[styles.progressBarInner, { width: `${Math.max(pct, 2)}%` }]} />
         </View>
-        <Text style={{ color: "#6E6A80", fontSize: 12, marginTop: 8 }}>Converting to audio... you can't skip this step</Text>
+        <Text style={{ color: "#6E6A80", fontSize: 12, marginTop: 10, textAlign: "center" }}>
+          This usually takes a few seconds.{"\n"}We're extracting audio from YouTube for you.
+        </Text>
       </View>
     );
   }
@@ -344,22 +365,24 @@ export default function MusicPlayerScreen({ route, navigation }) {
           <Image source={{ uri: displayThumb }} style={[styles.artwork, { width: 140, height: 140, marginBottom: 20 }]} />
         ) : null}
         <Text style={{ color: "#fff", fontSize: 16, fontWeight: "700", marginBottom: 4 }}>{displayTitle}</Text>
-        <Text style={{ color: "#F87171", fontSize: 14, fontWeight: "700", marginBottom: 8 }}>Audio unavailable</Text>
-        <Text style={{ color: "#9C97AE", fontSize: 13, textAlign: "center", marginBottom: 20, lineHeight: 20 }}>
-          YouTube blocked the download for this track.{"\n"}Tap retry or ask the room owner to set up cookies.
+        <Text style={{ color: "#F87171", fontSize: 14, fontWeight: "700", marginBottom: 8 }}>Audio extraction failed</Text>
+        <Text style={{ color: "#9C97AE", fontSize: 13, textAlign: "center", marginBottom: 24, lineHeight: 20 }}>
+          We tried {MAX_AUTO_RETRIES} times automatically but YouTube blocked the download.{"\n"}{"\n"}You can try again manually or skip this song.
         </Text>
         <TouchableOpacity
-          style={[styles.submitBtn, { width: 200, marginBottom: 12 }]}
+          style={[styles.submitBtn, { width: 220, marginBottom: 12 }]}
           onPress={async () => {
             setLoadError(false);
+            setAutoRetryCount(0);
             setExtractionProgress({ state: "extracting", percent: 5 });
+            setStatusMessage("Retrying extraction...");
             setRetryCount((c) => c + 1);
             try {
               await api.post(`/audio/${song.youtubeVideoId}/retry`);
             } catch {}
           }}
         >
-          <Text style={styles.submitBtnText}>Retry</Text>
+          <Text style={styles.submitBtnText}>Try Again</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.skipBtn} onPress={handleSkip}>
           <Text style={styles.skipBtnText}>Skip this song</Text>
