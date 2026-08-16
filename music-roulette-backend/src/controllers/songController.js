@@ -5,7 +5,7 @@ const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const { extractYoutubeId } = require("../utils/youtube");
 const { todayInTimezone, currentHourInTimezone } = require("../utils/dateHelper");
-const { getOrExtract } = require("../services/youtubeAudioService");
+const { triggerExtraction, extractMetadata } = require("../services/youtubeAudioService");
 
 const submitSongSchema = Joi.object({
   url: Joi.string().trim().required(),
@@ -25,31 +25,37 @@ const submitSong = asyncHandler(async (req, res) => {
   const existing = await DailySong.findOne({ group: req.group._id, user: req.user._id, dropDate });
   if (existing) throw new ApiError(409, "You've already dropped a song today.");
 
-  let metadata = { title: null, author: null, thumbnailUrl: null, durationSeconds: 0, audioUrl: null };
-  try {
-    metadata = await getOrExtract(videoId);
-  } catch (err) {
-    console.error(`[songController] extraction failed for ${videoId}:`, err.message);
-  }
-
-  if (!metadata.thumbnailUrl) {
-    metadata.thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-  }
-
   const song = await DailySong.create({
     group: req.group._id,
     user: req.user._id,
     youtubeVideoId: videoId,
-    title: metadata.title,
-    artist: metadata.author,
-    thumbnailUrl: metadata.thumbnailUrl,
-    durationSeconds: metadata.durationSeconds,
-    audioUrl: metadata.audioUrl,
-    streamReady: !!metadata.audioUrl,
+    title: null,
+    artist: null,
+    thumbnailUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+    durationSeconds: 0,
+    audioUrl: null,
+    streamReady: false,
     dropDate,
   });
 
   res.status(201).json({ success: true, song, isLate });
+
+  setImmediate(async () => {
+    try {
+      const metadata = await extractMetadata(videoId);
+      const update = {};
+      if (metadata.title) update.title = metadata.title;
+      if (metadata.author) update.artist = metadata.author;
+      if (metadata.thumbnailUrl) update.thumbnailUrl = metadata.thumbnailUrl;
+      if (metadata.durationSeconds) update.durationSeconds = metadata.durationSeconds;
+      if (Object.keys(update).length > 0) {
+        await DailySong.updateOne({ _id: song._id }, { $set: update });
+      }
+    } catch (err) {
+      console.error(`[songController] background metadata failed for ${videoId}:`, err.message);
+    }
+    triggerExtraction(videoId);
+  });
 });
 
 const getTodayQuest = asyncHandler(async (req, res) => {
