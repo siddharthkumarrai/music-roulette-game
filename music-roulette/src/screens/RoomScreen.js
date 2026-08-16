@@ -8,6 +8,7 @@ import {
   FlatList,
   Alert,
   RefreshControl,
+  Image,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -261,6 +262,13 @@ export default function RoomScreen({ route, navigation }) {
               style={styles.questCard}
               onPress={() => navigation.navigate("MusicPlayer", { groupId, song: item.song, myLog: item.myLog })}
             >
+              {item.song.thumbnailUrl ? (
+                <Image source={{ uri: item.song.thumbnailUrl }} style={styles.questThumb} />
+              ) : (
+                <View style={[styles.questThumb, styles.questThumbPlaceholder]}>
+                  <Text style={{ fontSize: 16 }}>🎵</Text>
+                </View>
+              )}
               <View style={{ flex: 1 }}>
                 <Text style={styles.questSong} numberOfLines={1} ellipsizeMode="tail">
                   {item.song.title || item.song.youtubeVideoId}
@@ -442,6 +450,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#2E2B3E",
+  },
+  questThumb: {
+    width: 44,
+    height: 44,
+    borderRadius: 8,
+    backgroundColor: "#2E2B3E",
+    marginRight: 12,
+  },
+  questThumbPlaceholder: {
+    alignItems: "center",
+    justifyContent: "center",
   },
   questSong: { color: "#fff", fontWeight: "600", fontSize: 14 },
   questVideo: { color: "#6E6A80", fontSize: 12, marginTop: 2 },

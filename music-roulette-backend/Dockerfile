@@ -18,7 +18,7 @@ RUN npm ci --omit=dev
 
 COPY . .
 
-RUN mkdir -p /tmp/audio_workdir
+RUN mkdir -p /tmp/audio_workdir /app/tools
 
 ENV NODE_ENV=production
 ENV TMPDIR=/tmp/audio_workdir

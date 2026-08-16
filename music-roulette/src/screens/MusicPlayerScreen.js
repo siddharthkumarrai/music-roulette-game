@@ -74,6 +74,7 @@ export default function MusicPlayerScreen({ route, navigation }) {
   useEffect(() => {
     if (audioReady && audioUrl) return;
 
+    let failedCount = 0;
     pollTimer.current = setInterval(async () => {
       try {
         const { data } = await api.get(`/audio/${song.youtubeVideoId}/status`);
@@ -85,12 +86,18 @@ export default function MusicPlayerScreen({ route, navigation }) {
           setAudioReady(true);
           if (data.audioUrl) setResolvedAudioUrl(data.audioUrl);
           if (data.durationSeconds) setDuration(data.durationSeconds);
+          return;
         }
         if (data.progress?.state === "failed") {
-          clearInterval(pollTimer.current);
-          pollTimer.current = null;
-          setLoadError(true);
+          failedCount++;
+          if (failedCount >= 3) {
+            clearInterval(pollTimer.current);
+            pollTimer.current = null;
+            setLoadError(true);
+          }
+          return;
         }
+        failedCount = 0;
       } catch {}
     }, POLL_INTERVAL_MS);
 

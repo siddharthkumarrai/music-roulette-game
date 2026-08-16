@@ -42,7 +42,11 @@ function getCookiePath() {
   const raw = process.env.YOUTUBE_COOKIES_BASE64;
   if (!raw) return null;
   try {
-    const cookiePath = path.join(__dirname, "..", "..", "tools", "cookies.txt");
+    const toolsDir = path.join(__dirname, "..", "..", "tools");
+    if (!fs.existsSync(toolsDir)) {
+      fs.mkdirSync(toolsDir, { recursive: true });
+    }
+    const cookiePath = path.join(toolsDir, "cookies.txt");
     if (!fs.existsSync(cookiePath)) {
       const decoded = Buffer.from(raw, "base64").toString("utf-8");
       fs.writeFileSync(cookiePath, decoded);
@@ -82,23 +86,36 @@ async function extractMetadata(videoId) {
   const url = `https://www.youtube.com/watch?v=${videoId}`;
   const cookiesArgs = buildCookiesArgs();
 
-  const { stdout } = await execFileAsync(YTDLP_PATH, [
-    "--no-download", "--print-json", "--no-playlist",
-    "--remote-components", "ejs:github",
-    ...cookiesArgs, url,
-  ], { timeout: 45000 });
+  try {
+    const { stdout } = await execFileAsync(YTDLP_PATH, [
+      "--no-download", "--print-json", "--no-playlist",
+      "--remote-components", "ejs:github",
+      ...cookiesArgs, url,
+    ], { timeout: 45000 });
 
-  const info = JSON.parse(stdout);
-  const metadata = {
-    videoId,
-    title: info.title || "Unknown",
-    author: info.channel || info.uploader || "Unknown",
-    thumbnailUrl: info.thumbnail || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
-    durationSeconds: info.duration || 0,
-  };
+    const info = JSON.parse(stdout);
+    const metadata = {
+      videoId,
+      title: info.title || "Unknown",
+      author: info.channel || info.uploader || "Unknown",
+      thumbnailUrl: info.thumbnail || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+      durationSeconds: info.duration || 0,
+    };
 
-  try { fs.writeFileSync(localMeta, JSON.stringify(metadata)); } catch {}
-  return metadata;
+    try { fs.writeFileSync(localMeta, JSON.stringify(metadata)); } catch {}
+    return metadata;
+  } catch (err) {
+    console.error(`[ytAudio] metadata extraction failed for ${videoId}:`, err.message.split("\n")[0]);
+    const fallback = {
+      videoId,
+      title: null,
+      author: null,
+      thumbnailUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+      durationSeconds: 0,
+    };
+    try { fs.writeFileSync(localMeta, JSON.stringify(fallback)); } catch {}
+    return fallback;
+  }
 }
 
 function runYtdlp(args, timeoutMs = 90000) {

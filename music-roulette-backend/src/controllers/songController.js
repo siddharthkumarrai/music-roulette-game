@@ -32,6 +32,10 @@ const submitSong = asyncHandler(async (req, res) => {
     console.error(`[songController] extraction failed for ${videoId}:`, err.message);
   }
 
+  if (!metadata.thumbnailUrl) {
+    metadata.thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  }
+
   const song = await DailySong.create({
     group: req.group._id,
     user: req.user._id,

@@ -11,6 +11,7 @@ import {
   Image,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Constants from "expo-constants";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
@@ -19,6 +20,7 @@ const TOP_PAD = (Constants.statusBarHeight || 44) + 16;
 
 export default function RoomsListScreen({ navigation }) {
   const { user, logout } = useAuth();
+  const insets = useSafeAreaInsets();
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -111,7 +113,7 @@ export default function RoomsListScreen({ navigation }) {
         }}
       />
 
-      <View style={[styles.footerBtns, { paddingBottom: Platform.OS === "ios" ? 34 : 20 }]}>
+      <View style={[styles.footerBtns, { paddingBottom: insets.bottom + 12 }]}>
         <TouchableOpacity
           style={[styles.footerBtn, styles.footerBtnGhost]}
           onPress={() => navigation.navigate("JoinRoom")}
