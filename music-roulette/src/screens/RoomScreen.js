@@ -104,7 +104,7 @@ export default function RoomScreen({ route, navigation }) {
     }
     setSubmitting(true);
     try {
-      const { data } = await api.post(`/groups/${groupId}/songs`, { url: link.trim() });
+      const { data } = await api.post(`/groups/${groupId}/songs`, { url: link.trim() }, { timeout: 60000 });
       if (data.isLate) {
         Alert.alert("Dropped late", "This counts as a late drop — deadline already passed today.");
       }
