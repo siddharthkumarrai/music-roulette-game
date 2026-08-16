@@ -65,6 +65,9 @@ export default function MusicPlayerScreen({ route, navigation }) {
   const [extractionProgress, setExtractionProgress] = useState(null);
   const [audioReady, setAudioReady] = useState(!!song.audioUrl);
   const [resolvedAudioUrl, setResolvedAudioUrl] = useState(song.audioUrl || null);
+  const [liveTitle, setLiveTitle] = useState(song.title);
+  const [liveArtist, setLiveArtist] = useState(song.artist);
+  const [liveThumb, setLiveThumb] = useState(song.thumbnailUrl);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
@@ -79,6 +82,12 @@ export default function MusicPlayerScreen({ route, navigation }) {
       try {
         const { data } = await api.get(`/audio/${song.youtubeVideoId}/status`);
         setExtractionProgress(data.progress);
+        if (data.title && !liveTitle) setLiveTitle(data.title);
+        if (data.artist && !liveArtist) setLiveArtist(data.artist);
+        if (data.thumbnailUrl && !liveThumb) setLiveThumb(data.thumbnailUrl);
+        if (data.title) setLiveTitle(data.title);
+        if (data.artist) setLiveArtist(data.artist);
+        if (data.thumbnailUrl) setLiveThumb(data.thumbnailUrl);
 
         if (data.progress?.state === "done" || data.streamReady || data.audioUrl) {
           clearInterval(pollTimer.current);
@@ -302,17 +311,21 @@ export default function MusicPlayerScreen({ route, navigation }) {
 
   if (showExtractionUI) {
     const pct = extractionProgress?.percent || 0;
+    const displayThumb = liveThumb || song.thumbnailUrl;
+    const displayTitle = liveTitle || song.title || song.youtubeVideoId;
+    const displayArtist = liveArtist || song.artist || "Unknown Artist";
     return (
       <View style={[styles.container, { alignItems: "center", justifyContent: "center", padding: 32 }]}>
-        {song.thumbnailUrl ? (
-          <Image source={{ uri: song.thumbnailUrl }} style={[styles.artwork, { width: 180, height: 180, marginBottom: 24 }]} />
+        {displayThumb ? (
+          <Image source={{ uri: displayThumb }} style={[styles.artwork, { width: 180, height: 180, marginBottom: 24 }]} />
         ) : (
           <View style={[styles.artwork, styles.artworkPlaceholder, { width: 180, height: 180, marginBottom: 24 }]}>
             <Text style={{ fontSize: 48 }}>🎵</Text>
           </View>
         )}
-        <Text style={styles.trackTitle} numberOfLines={1}>{song.title || song.youtubeVideoId}</Text>
-        <Text style={styles.trackArtist} numberOfLines={1}>{song.artist || "Unknown Artist"}</Text>
+        <Text style={styles.trackTitle} numberOfLines={1}>{displayTitle}</Text>
+        <Text style={styles.trackArtist} numberOfLines={1}>{displayArtist}</Text>
+        <ActivityIndicator color="#B98CFF" style={{ marginTop: 12 }} />
         <Text style={{ color: "#9C97AE", fontSize: 13, marginTop: 8 }}>{getExtractionLabel(extractionProgress)}</Text>
         <View style={styles.progressBarOuter}>
           <View style={[styles.progressBarInner, { width: `${Math.max(pct, 2)}%` }]} />
@@ -323,12 +336,15 @@ export default function MusicPlayerScreen({ route, navigation }) {
   }
 
   if (loadError) {
+    const displayThumb = liveThumb || song.thumbnailUrl;
+    const displayTitle = liveTitle || song.title || song.youtubeVideoId;
     return (
       <View style={[styles.container, { alignItems: "center", justifyContent: "center", padding: 32 }]}>
-        {song.thumbnailUrl ? (
-          <Image source={{ uri: song.thumbnailUrl }} style={[styles.artwork, { width: 140, height: 140, marginBottom: 20 }]} />
+        {displayThumb ? (
+          <Image source={{ uri: displayThumb }} style={[styles.artwork, { width: 140, height: 140, marginBottom: 20 }]} />
         ) : null}
-        <Text style={{ color: "#F87171", fontSize: 16, fontWeight: "700", marginBottom: 8 }}>Audio unavailable</Text>
+        <Text style={{ color: "#fff", fontSize: 16, fontWeight: "700", marginBottom: 4 }}>{displayTitle}</Text>
+        <Text style={{ color: "#F87171", fontSize: 14, fontWeight: "700", marginBottom: 8 }}>Audio unavailable</Text>
         <Text style={{ color: "#9C97AE", fontSize: 13, textAlign: "center", marginBottom: 20, lineHeight: 20 }}>
           YouTube blocked the download for this track.{"\n"}Tap retry or ask the room owner to set up cookies.
         </Text>
@@ -369,16 +385,16 @@ export default function MusicPlayerScreen({ route, navigation }) {
       <Text style={styles.byline}>{song.user?.name}'s pick</Text>
 
       <View style={styles.card}>
-        {song.thumbnailUrl ? (
-          <Image source={{ uri: song.thumbnailUrl }} style={styles.artwork} />
+        {liveThumb ? (
+          <Image source={{ uri: liveThumb }} style={styles.artwork} />
         ) : (
           <View style={[styles.artwork, styles.artworkPlaceholder]}>
             <Text style={{ fontSize: 48 }}>🎵</Text>
           </View>
         )}
 
-        <Text style={styles.trackTitle} numberOfLines={1}>{song.title || song.youtubeVideoId}</Text>
-        <Text style={styles.trackArtist} numberOfLines={1}>{song.artist || "Unknown Artist"}</Text>
+        <Text style={styles.trackTitle} numberOfLines={1}>{liveTitle || song.youtubeVideoId}</Text>
+        <Text style={styles.trackArtist} numberOfLines={1}>{liveArtist || "Unknown Artist"}</Text>
 
         <View style={styles.progressRow}>
           <Text style={styles.timeLabel}>{formatTime(position)}</Text>

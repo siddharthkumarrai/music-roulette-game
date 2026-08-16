@@ -36,6 +36,9 @@ export default function PlaylistItem({ song, isPlaying, isLoading, onPress }) {
           {song.durationSeconds > 0 && (
             <Text style={styles.duration}>{formatDuration(song.durationSeconds)}</Text>
           )}
+          {!hasAudio && (
+            <Text style={styles.processing}>Processing...</Text>
+          )}
           {song.dropDate && (
             <Text style={styles.date}>{song.dropDate}</Text>
           )}
@@ -104,6 +107,11 @@ const styles = StyleSheet.create({
   },
   duration: {
     color: "#6E6A80",
+    fontSize: 11,
+    fontWeight: "600",
+  },
+  processing: {
+    color: "#B98CFF",
     fontSize: 11,
     fontWeight: "600",
   },

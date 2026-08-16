@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Alert,
   RefreshControl,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -59,6 +60,8 @@ export default function RoomScreen({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
+  const [submittedVideoId, setSubmittedVideoId] = useState(null);
+  const metaRefreshTimer = useRef(null);
 
   const loadData = useCallback(async () => {
     try {
@@ -104,12 +107,23 @@ export default function RoomScreen({ route, navigation }) {
     }
     setSubmitting(true);
     try {
-      const { data } = await api.post(`/groups/${groupId}/songs`, { url: link.trim() }, { timeout: 60000 });
+      const { data } = await api.post(`/groups/${groupId}/songs`, { url: link.trim() }, { timeout: 10000 });
       if (data.isLate) {
         Alert.alert("Dropped late", "This counts as a late drop — deadline already passed today.");
       }
       setLink("");
+      setSubmittedVideoId(data.song.youtubeVideoId);
       loadData();
+      if (metaRefreshTimer.current) clearInterval(metaRefreshTimer.current);
+      metaRefreshTimer.current = setInterval(() => {
+        loadData();
+      }, 8000);
+      setTimeout(() => {
+        if (metaRefreshTimer.current) {
+          clearInterval(metaRefreshTimer.current);
+          metaRefreshTimer.current = null;
+        }
+      }, 60000);
     } catch (err) {
       Alert.alert("Couldn't submit", err.message);
     } finally {
@@ -138,6 +152,12 @@ export default function RoomScreen({ route, navigation }) {
       ]
     );
   };
+
+  useEffect(() => {
+    return () => {
+      if (metaRefreshTimer.current) clearInterval(metaRefreshTimer.current);
+    };
+  }, []);
 
   if (!group) return null;
 
@@ -224,11 +244,29 @@ export default function RoomScreen({ route, navigation }) {
             <Text style={styles.sectionTitle}>Your Song of the Day</Text>
             {mySong ? (
               <View style={styles.submittedCard}>
-                <Text style={styles.submittedText}>✅ Dropped</Text>
-                <Text style={styles.submittedTitle} numberOfLines={2}>
-                  {mySong.title || mySong.youtubeVideoId}
-                </Text>
-                <Text style={styles.submittedSub}>Waiting for the room to listen...</Text>
+                <View style={styles.submittedRow}>
+                  {mySong.thumbnailUrl ? (
+                    <Image source={{ uri: mySong.thumbnailUrl }} style={styles.submittedThumb} />
+                  ) : (
+                    <View style={[styles.submittedThumb, { alignItems: "center", justifyContent: "center" }]}>
+                      <Text style={{ fontSize: 18 }}>🎵</Text>
+                    </View>
+                  )}
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.submittedText}>✅ Dropped</Text>
+                    <Text style={styles.submittedTitle} numberOfLines={2}>
+                      {mySong.title || mySong.youtubeVideoId}
+                    </Text>
+                  </View>
+                </View>
+                {!mySong.streamReady && !mySong.audioUrl ? (
+                  <View style={styles.processingRow}>
+                    <ActivityIndicator color="#B98CFF" size="small" />
+                    <Text style={styles.processingText}>Processing audio...</Text>
+                  </View>
+                ) : (
+                  <Text style={styles.submittedSub}>Waiting for the room to listen...</Text>
+                )}
               </View>
             ) : (
               <View style={styles.submitBox}>
@@ -428,9 +466,27 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#2E2B3E",
   },
+  submittedRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  submittedThumb: {
+    width: 52,
+    height: 52,
+    borderRadius: 8,
+    backgroundColor: "#2E2B3E",
+    marginRight: 12,
+  },
   submittedText: { color: "#4ADE80", fontWeight: "700", fontSize: 13 },
-  submittedTitle: { color: "#fff", fontWeight: "600", fontSize: 14, marginTop: 6 },
-  submittedSub: { color: "#9C97AE", fontSize: 12, marginTop: 6 },
+  submittedTitle: { color: "#fff", fontWeight: "600", fontSize: 14, marginTop: 4 },
+  submittedSub: { color: "#9C97AE", fontSize: 12, marginTop: 10 },
+  processingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 10,
+  },
+  processingText: { color: "#B98CFF", fontSize: 12, fontWeight: "600" },
 
   questHeaderRow: {
     flexDirection: "row",

@@ -104,9 +104,11 @@ export default function PlaylistsScreen({ route, navigation }) {
       try {
         const { data } = await api.get(`/audio/${song.youtubeVideoId}/status`);
         if (data.audioUrl) {
-          await loadAndPlay(data.audioUrl, song, userId);
+          await loadAndPlay(data.audioUrl, { ...song, title: data.title || song.title, artist: data.artist || song.artist, thumbnailUrl: data.thumbnailUrl || song.thumbnailUrl }, userId);
+        } else if (data.progress?.state === "failed") {
+          Alert.alert("Extraction failed", "YouTube blocked the download for this track. The owner needs to retry from the player.");
         } else {
-          Alert.alert("Not ready", "This song is still being processed. Try again in a moment.");
+          Alert.alert("Still processing", "This song is being converted to audio. Check back in a moment.");
         }
       } catch {
         Alert.alert("Error", "Could not load audio for this song.");
