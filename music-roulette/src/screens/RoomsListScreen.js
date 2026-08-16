@@ -15,7 +15,7 @@ import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
 
 export default function RoomsListScreen({ navigation }) {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const [groups, setGroups] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -64,9 +64,6 @@ export default function RoomsListScreen({ navigation }) {
             ) : (
               <Text style={styles.profileEmoji}>{user?.avatarEmoji || "🎧"}</Text>
             )}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={logout} style={styles.logoutBtn}>
-            <Text style={styles.logout}>Logout</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -155,13 +152,6 @@ const styles = StyleSheet.create({
   },
   profileAvatar: { width: 40, height: 40, borderRadius: 20 },
   profileEmoji: { fontSize: 20 },
-  logoutBtn: {
-    backgroundColor: "rgba(248, 113, 113, 0.12)",
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-  },
-  logout: { color: "#F87171", fontWeight: "700", fontSize: 12 },
   roomCard: {
     flexDirection: "row",
     alignItems: "center",

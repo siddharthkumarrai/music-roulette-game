@@ -36,7 +36,7 @@ const GENRE_OPTIONS = [
 
 export default function ProfileScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const { user, loading: authLoading, refreshUser } = useAuth();
+  const { user, loading: authLoading, refreshUser, logout } = useAuth();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -252,6 +252,10 @@ export default function ProfileScreen({ navigation }) {
         </View>
       )}
 
+      <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+        <Text style={styles.logoutBtnText}>Log Out</Text>
+      </TouchableOpacity>
+
       <Modal visible={showEmojiPicker} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
@@ -421,6 +425,18 @@ const styles = StyleSheet.create({
   statIcon: { fontSize: 18, marginBottom: 4 },
   statValue: { color: "#fff", fontSize: 20, fontWeight: "800" },
   statLabel: { color: "#9C97AE", fontSize: 12, marginTop: 2 },
+
+  logoutBtn: {
+    backgroundColor: "rgba(248, 113, 113, 0.12)",
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: "center",
+    marginTop: 32,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: "rgba(248, 113, 113, 0.25)",
+  },
+  logoutBtnText: { color: "#F87171", fontWeight: "800", fontSize: 15 },
 
   modalOverlay: {
     flex: 1,

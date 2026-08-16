@@ -5,7 +5,7 @@ const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const { extractYoutubeId } = require("../utils/youtube");
 const { todayInTimezone, currentHourInTimezone } = require("../utils/dateHelper");
-const { triggerExtraction, extractMetadata } = require("../services/youtubeAudioService");
+const { triggerExtraction, extractMetadata, audioExists } = require("../services/youtubeAudioService");
 
 const submitSongSchema = Joi.object({
   url: Joi.string().trim().required(),
@@ -69,6 +69,13 @@ const getTodayQuest = asyncHandler(async (req, res) => {
       "name avatarEmoji"
     ),
   ]);
+
+  if (mySong && !mySong.audioUrl) {
+    const hasLocal = audioExists(mySong.youtubeVideoId);
+    if (hasLocal) {
+      mySong.streamReady = true;
+    }
+  }
 
   const logs = await ListeningLog.find({
     group: req.group._id,

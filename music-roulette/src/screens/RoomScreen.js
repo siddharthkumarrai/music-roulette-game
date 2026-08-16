@@ -103,7 +103,7 @@ export default function RoomScreen({ route, navigation }) {
       setMySongAudioReady(true);
       return;
     }
-    setMySongAudioReady(false);
+    if (mySongAudioReady) return;
     let pollCount = 0;
     const poll = setInterval(async () => {
       pollCount++;
@@ -117,7 +117,7 @@ export default function RoomScreen({ route, navigation }) {
       } catch {}
     }, 4000);
     return () => clearInterval(poll);
-  }, [mySong?._id, mySong?.audioUrl, mySong?.streamReady]);
+  }, [mySong?._id]);
 
   const onRefresh = () => {
     setRefreshing(true);
