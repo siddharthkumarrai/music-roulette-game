@@ -12,7 +12,7 @@ import {
   StatusBar,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react-native";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react-native";
 import { useAuth } from "../context/AuthContext";
 import { colors } from "../theme/colors";
 
@@ -133,10 +133,6 @@ export default function LoginScreen({ navigation }) {
       <StatusBar barStyle="light-content" />
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
         <View style={[styles.inner, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16 }]}>
-          <TouchableOpacity style={[styles.backBtn, { marginTop: 8 }]} onPress={() => navigation.goBack()} activeOpacity={0.7}>
-            <ArrowLeft size={20} color={colors.textPrimary} />
-          </TouchableOpacity>
-
           <View style={styles.logoSection}>
             <Animated.View style={[styles.logoMark, { opacity: logoOp, transform: [{ scale: logoScale }] }]}>
               <Text style={styles.logoEmoji}>🎵</Text>
