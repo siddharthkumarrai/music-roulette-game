@@ -153,12 +153,13 @@ function SlideItem({ item, index, scrollX }) {
   );
 }
 
-export default function OnboardingScreen({ navigation }) {
+export default function OnboardingScreen({ navigation, route }) {
   const insets = useSafeAreaInsets();
   const scrollX = useRef(new Animated.Value(0)).current;
   const bgColors = SLIDES.map((s) => s.bg);
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const onComplete = route.params?.onComplete;
 
   const bgColor = scrollX.interpolate({
     inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
@@ -182,8 +183,10 @@ export default function OnboardingScreen({ navigation }) {
 
   const handleFinish = useCallback(async () => {
     await AsyncStorage.setItem("has_seen_onboarding", "true");
-    navigation.replace("Login");
-  }, [navigation]);
+    if (onComplete) {
+      onComplete();
+    }
+  }, [onComplete]);
 
   const isLastSlide = currentIndex === SLIDES.length - 1;
 

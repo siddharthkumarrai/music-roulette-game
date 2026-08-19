@@ -58,10 +58,10 @@ function MainStack() {
   );
 }
 
-function OnboardingStack() {
+function OnboardingStack({ onComplete }) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+      <Stack.Screen name="Onboarding" component={OnboardingScreen} initialParams={{ onComplete }} />
     </Stack.Navigator>
   );
 }
@@ -89,7 +89,7 @@ export default function AppNavigator() {
   return (
     <NavigationContainer theme={{ colors: { background: "#12111A" } }}>
       {!hasSeenOnboarding ? (
-        <OnboardingStack />
+        <OnboardingStack onComplete={() => setHasSeenOnboarding(true)} />
       ) : user ? (
         <MainStack />
       ) : (
