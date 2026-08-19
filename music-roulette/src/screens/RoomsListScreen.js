@@ -13,6 +13,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
+import { colors } from "../theme/colors";
 
 export default function RoomsListScreen({ navigation }) {
   const { user } = useAuth();
@@ -45,7 +46,7 @@ export default function RoomsListScreen({ navigation }) {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color="#B98CFF" size="large" />
+        <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
   }
@@ -71,7 +72,7 @@ export default function RoomsListScreen({ navigation }) {
       <FlatList
         data={groups}
         keyExtractor={(item) => item._id}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#B98CFF" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
         renderItem={({ item }) => (
           <TouchableOpacity
             style={styles.roomCard}
@@ -127,8 +128,8 @@ export default function RoomsListScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
-  center: { flex: 1, backgroundColor: "#12111A", alignItems: "center", justifyContent: "center" },
+  container: { flex: 1, backgroundColor: colors.background },
+  center: { flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center" },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -140,12 +141,12 @@ const styles = StyleSheet.create({
   headerLeft: { flex: 1, marginRight: 12 },
   headerRight: { flexDirection: "row", alignItems: "center", gap: 8 },
   hello: { color: "#fff", fontSize: 26, fontWeight: "800", letterSpacing: -0.5 },
-  sub: { color: "#9C97AE", fontSize: 14, marginTop: 4 },
+  sub: { color: colors.textSecondary, fontSize: 14, marginTop: 4 },
   profileBtn: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
@@ -155,47 +156,47 @@ const styles = StyleSheet.create({
   roomCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   roomIcon: {
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 14,
   },
   roomInfo: { flex: 1, minWidth: 0 },
   roomName: { color: "#fff", fontSize: 17, fontWeight: "700" },
-  roomMeta: { color: "#9C97AE", fontSize: 13, marginTop: 3 },
-  chevron: { color: "#6E6A80", fontSize: 24, fontWeight: "300", marginLeft: 8 },
+  roomMeta: { color: colors.textSecondary, fontSize: 13, marginTop: 3 },
+  chevron: { color: colors.textSecondary, fontSize: 24, fontWeight: "300", marginLeft: 8 },
   empty: { alignItems: "center", marginTop: 80 },
   emptyIcon: { fontSize: 56, marginBottom: 16 },
   emptyText: { color: "#fff", fontSize: 18, fontWeight: "700" },
-  emptySub: { color: "#6E6A80", fontSize: 14, marginTop: 8, textAlign: "center", lineHeight: 20 },
+  emptySub: { color: colors.textSecondary, fontSize: 14, marginTop: 8, textAlign: "center", lineHeight: 20 },
   footerBtns: {
     flexDirection: "row",
     gap: 12,
     paddingHorizontal: 20,
     paddingTop: 12,
-    backgroundColor: "#12111A",
+    backgroundColor: colors.background,
     borderTopWidth: 1,
-    borderTopColor: "#1E1C2A",
+    borderTopColor: colors.surface,
   },
   footerBtn: {
     flex: 1,
-    backgroundColor: "#B98CFF",
+    backgroundColor: colors.primary,
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: "center",
   },
-  footerBtnText: { color: "#12111A", fontWeight: "800", fontSize: 15 },
-  footerBtnGhost: { backgroundColor: "#1E1C2A", borderWidth: 1, borderColor: "#2E2B3E" },
+  footerBtnText: { color: colors.background, fontWeight: "800", fontSize: 15 },
+  footerBtnGhost: { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.surfaceBorder },
   footerBtnGhostText: { color: "#fff", fontWeight: "700", fontSize: 15 },
 });

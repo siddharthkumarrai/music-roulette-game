@@ -17,6 +17,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
+import { colors } from "../theme/colors";
 
 function getTimeRemaining(deadlineHour, timezone) {
   const now = new Date();
@@ -199,7 +200,7 @@ export default function RoomScreen({ route, navigation }) {
     <View style={styles.container}>
       <FlatList
         data={quest}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#B98CFF" />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
         ListHeaderComponent={
           <>
             <View style={styles.header}>
@@ -290,7 +291,7 @@ export default function RoomScreen({ route, navigation }) {
                 </View>
                 {!mySongAudioReady ? (
                   <View style={styles.processingRow}>
-                    <ActivityIndicator color="#B98CFF" size="small" />
+                    <ActivityIndicator color={colors.primary} size="small" />
                     <Text style={styles.processingText}>Processing audio...</Text>
                   </View>
                 ) : (
@@ -302,7 +303,7 @@ export default function RoomScreen({ route, navigation }) {
                 <TextInput
                   style={styles.input}
                   placeholder="Paste YouTube link..."
-                  placeholderTextColor="#6E6A80"
+                  placeholderTextColor={colors.textSecondary}
                   value={link}
                   onChangeText={setLink}
                   autoCapitalize="none"
@@ -414,7 +415,7 @@ function StatusBadge({ status }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
+  container: { flex: 1, backgroundColor: colors.background },
 
   header: {
     flexDirection: "row",
@@ -424,23 +425,23 @@ const styles = StyleSheet.create({
   },
   roomName: { fontSize: 22, fontWeight: "800", color: "#fff", flex: 1, marginRight: 8 },
   headerLinks: { flexDirection: "row", gap: 10, alignItems: "center", flexShrink: 0 },
-  linkBtn: { color: "#B98CFF", fontWeight: "700", fontSize: 13 },
-  linkBtnDim: { color: "#6E6A80", fontWeight: "600", fontSize: 13 },
+  linkBtn: { color: colors.primary, fontWeight: "700", fontSize: 13 },
+  linkBtnDim: { color: colors.textSecondary, fontWeight: "600", fontSize: 13 },
 
   infoRow: { flexDirection: "row", gap: 8, marginBottom: 6 },
   infoBadge: {
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   infoBadgeWarn: { borderColor: "#F87171", backgroundColor: "rgba(248, 113, 113, 0.08)" },
-  infoBadgeText: { color: "#9C97AE", fontSize: 12, fontWeight: "600" },
+  infoBadgeText: { color: colors.textSecondary, fontSize: 12, fontWeight: "600" },
   infoBadgeTextWarn: { color: "#F87171" },
 
-  dateText: { color: "#6E6A80", fontSize: 12, marginBottom: 16 },
+  dateText: { color: colors.textSecondary, fontSize: 12, marginBottom: 16 },
 
   deleteRoomBtn: {
     borderWidth: 1,
@@ -456,45 +457,45 @@ const styles = StyleSheet.create({
   statsRow: { flexDirection: "row", gap: 8, marginBottom: 24 },
   statBox: {
     flex: 1,
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   statValue: { color: "#fff", fontSize: 18, fontWeight: "800" },
-  statLabel: { color: "#9C97AE", fontSize: 11, marginTop: 2 },
+  statLabel: { color: colors.textSecondary, fontSize: 11, marginTop: 2 },
 
   sectionTitle: { color: "#fff", fontSize: 16, fontWeight: "700", marginBottom: 10 },
 
   submitBox: { flexDirection: "row", gap: 8, marginBottom: 24 },
   input: {
     flex: 1,
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 12,
     paddingHorizontal: 14,
     color: "#fff",
     height: 46,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
     fontSize: 14,
   },
   submitBtn: {
-    backgroundColor: "#B98CFF",
+    backgroundColor: colors.primary,
     borderRadius: 12,
     paddingHorizontal: 18,
     justifyContent: "center",
   },
-  submitBtnText: { color: "#12111A", fontWeight: "800", fontSize: 14 },
+  submitBtnText: { color: colors.background, fontWeight: "800", fontSize: 14 },
 
   submittedCard: {
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 16,
     marginBottom: 24,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   submittedRow: {
     flexDirection: "row",
@@ -504,19 +505,19 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 8,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     marginRight: 12,
   },
   submittedText: { color: "#4ADE80", fontWeight: "700", fontSize: 13 },
   submittedTitle: { color: "#fff", fontWeight: "600", fontSize: 14, marginTop: 4 },
-  submittedSub: { color: "#9C97AE", fontSize: 12, marginTop: 10 },
+  submittedSub: { color: colors.textSecondary, fontSize: 12, marginTop: 10 },
   processingRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
     marginTop: 10,
   },
-  processingText: { color: "#B98CFF", fontSize: 12, fontWeight: "600" },
+  processingText: { color: colors.primary, fontSize: 12, fontWeight: "600" },
 
   questHeaderRow: {
     flexDirection: "row",
@@ -524,10 +525,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  questProgress: { color: "#B98CFF", fontWeight: "700", fontSize: 14 },
+  questProgress: { color: colors.primary, fontWeight: "700", fontSize: 14 },
 
   questCard: {
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 14,
     marginBottom: 8,
@@ -535,13 +536,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   questThumb: {
     width: 44,
     height: 44,
     borderRadius: 8,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     marginRight: 12,
   },
   questThumbPlaceholder: {
@@ -549,7 +550,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   questSong: { color: "#fff", fontWeight: "600", fontSize: 14 },
-  questVideo: { color: "#6E6A80", fontSize: 12, marginTop: 2 },
+  questVideo: { color: colors.textSecondary, fontSize: 12, marginTop: 2 },
 
   badge: {
     borderRadius: 8,
@@ -559,9 +560,9 @@ const styles = StyleSheet.create({
   },
   badgeText: { fontWeight: "700", fontSize: 12 },
 
-  empty: { color: "#6E6A80", textAlign: "center", marginVertical: 24, fontSize: 14 },
+  empty: { color: colors.textSecondary, textAlign: "center", marginVertical: 24, fontSize: 14 },
   busyPassBtn: { marginTop: 8, alignItems: "center", padding: 12 },
-  busyPassText: { color: "#6E6A80", fontSize: 13 },
+  busyPassText: { color: colors.textSecondary, fontSize: 13 },
 
   bottomBar: {
     position: "absolute",
@@ -570,7 +571,7 @@ const styles = StyleSheet.create({
     right: 0,
     backgroundColor: "#1A1828",
     borderTopWidth: 1,
-    borderTopColor: "#2E2B3E",
+    borderTopColor: colors.surfaceBorder,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 16,
@@ -582,10 +583,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   bottomBarIcon: { fontSize: 20, marginBottom: 2 },
-  bottomBarLabel: { color: "#9C97AE", fontSize: 11, fontWeight: "600" },
+  bottomBarLabel: { color: colors.textSecondary, fontSize: 11, fontWeight: "600" },
   bottomBarDivider: {
     width: 1,
     height: 28,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
   },
 });

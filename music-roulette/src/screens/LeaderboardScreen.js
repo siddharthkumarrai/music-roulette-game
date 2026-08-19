@@ -10,6 +10,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
+import { colors } from "../theme/colors";
 
 const TABS = [
   { key: "weekly", label: "This Week" },
@@ -129,7 +130,7 @@ export default function LeaderboardScreen({ route }) {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color="#B98CFF" size="large" />
+        <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
   }
@@ -246,56 +247,56 @@ export default function LeaderboardScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
-  center: { flex: 1, backgroundColor: "#12111A", alignItems: "center", justifyContent: "center" },
+  container: { flex: 1, backgroundColor: colors.background },
+  center: { flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center" },
   title: { color: "#fff", fontSize: 22, fontWeight: "800", padding: 20, paddingBottom: 4 },
-  subtitle: { color: "#6E6A80", fontSize: 13, paddingHorizontal: 20, marginBottom: 12 },
-  countdown: { color: "#B98CFF", fontSize: 13, fontWeight: "600", paddingHorizontal: 20, marginBottom: 12 },
+  subtitle: { color: colors.textSecondary, fontSize: 13, paddingHorizontal: 20, marginBottom: 12 },
+  countdown: { color: colors.primary, fontSize: 13, fontWeight: "600", paddingHorizontal: 20, marginBottom: 12 },
   tabs: { flexDirection: "row", paddingHorizontal: 20, gap: 8, marginBottom: 8 },
   tab: {
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 20,
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
-  tabActive: { backgroundColor: "#B98CFF", borderColor: "#B98CFF" },
-  tabText: { color: "#9C97AE", fontWeight: "600", fontSize: 13 },
-  tabTextActive: { color: "#12111A" },
+  tabActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  tabText: { color: colors.textSecondary, fontWeight: "600", fontSize: 13 },
+  tabTextActive: { color: colors.background },
 
   row: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 14,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   rank: { width: 40, fontSize: 16, color: "#fff", fontWeight: "700", textAlign: "center" },
   avatar: { fontSize: 24, marginRight: 12 },
   name: { color: "#fff", fontWeight: "700", fontSize: 15 },
-  streak: { color: "#9C97AE", fontSize: 12, marginTop: 2 },
+  streak: { color: colors.textSecondary, fontSize: 12, marginTop: 2 },
   pointsWrap: { alignItems: "center" },
-  points: { color: "#B98CFF", fontWeight: "800", fontSize: 18 },
-  pointsLabel: { color: "#6E6A80", fontSize: 10, fontWeight: "600" },
+  points: { color: colors.primary, fontWeight: "800", fontSize: 18 },
+  pointsLabel: { color: colors.textSecondary, fontSize: 10, fontWeight: "600" },
 
   weekCard: {
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   weekHeader: { marginBottom: 12 },
-  weekRange: { color: "#9C97AE", fontSize: 13, fontWeight: "600" },
+  weekRange: { color: colors.textSecondary, fontSize: 13, fontWeight: "600" },
   winnerRow: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#251F35",
+    backgroundColor: colors.surfaceBorder,
     borderRadius: 12,
     padding: 12,
     marginBottom: 8,
@@ -303,16 +304,16 @@ const styles = StyleSheet.create({
   winnerMedal: { width: 36, fontSize: 18, color: "#fff", fontWeight: "700", textAlign: "center" },
   winnerAvatar: { fontSize: 22, marginRight: 10 },
   winnerName: { color: "#fff", fontWeight: "700", fontSize: 14 },
-  winnerMeta: { color: "#9C97AE", fontSize: 11, marginTop: 2 },
-  winnerPoints: { color: "#B98CFF", fontWeight: "800", fontSize: 15 },
-  noData: { color: "#6E6A80", fontSize: 13, textAlign: "center", paddingVertical: 12 },
+  winnerMeta: { color: colors.textSecondary, fontSize: 11, marginTop: 2 },
+  winnerPoints: { color: colors.primary, fontWeight: "800", fontSize: 15 },
+  noData: { color: colors.textSecondary, fontSize: 13, textAlign: "center", paddingVertical: 12 },
 
   emptyWrap: { alignItems: "center", marginTop: 60 },
   emptyIcon: { fontSize: 48, marginBottom: 12 },
   emptyText: { color: "#fff", fontSize: 16, fontWeight: "700" },
-  emptySub: { color: "#6E6A80", fontSize: 13, marginTop: 6, textAlign: "center" },
+  emptySub: { color: colors.textSecondary, fontSize: 13, marginTop: 6, textAlign: "center" },
 
-  empty: { color: "#6E6A80", textAlign: "center", marginTop: 40, fontSize: 14 },
+  empty: { color: colors.textSecondary, textAlign: "center", marginTop: 40, fontSize: 14 },
   footerNote: { marginTop: 16 },
-  footNote: { color: "#6E6A80", fontSize: 12, textAlign: "center", lineHeight: 18 },
+  footNote: { color: colors.textSecondary, fontSize: 12, textAlign: "center", lineHeight: 18 },
 });

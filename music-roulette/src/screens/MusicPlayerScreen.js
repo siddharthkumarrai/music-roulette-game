@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { Audio } from "expo-av";
 import { api } from "../config/api";
+import { colors } from "../theme/colors";
 
 const MIN_REACTION_LENGTH = 20;
 const LISTEN_THRESHOLD = 0.9;
@@ -344,12 +345,12 @@ export default function MusicPlayerScreen({ route, navigation }) {
         )}
         <Text style={styles.trackTitle} numberOfLines={1}>{displayTitle}</Text>
         <Text style={styles.trackArtist} numberOfLines={1}>{displayArtist}</Text>
-        <ActivityIndicator color="#B98CFF" style={{ marginTop: 16 }} size="large" />
-        <Text style={{ color: "#B98CFF", fontSize: 14, fontWeight: "600", marginTop: 12, textAlign: "center" }}>{statusMessage}</Text>
+        <ActivityIndicator color={colors.primary} style={{ marginTop: 16 }} size="large" />
+        <Text style={{ color: colors.primary, fontSize: 14, fontWeight: "600", marginTop: 12, textAlign: "center" }}>{statusMessage}</Text>
         <View style={styles.progressBarOuter}>
           <View style={[styles.progressBarInner, { width: `${Math.max(pct, 2)}%` }]} />
         </View>
-        <Text style={{ color: "#6E6A80", fontSize: 12, marginTop: 10, textAlign: "center" }}>
+        <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 10, textAlign: "center" }}>
           This usually takes a few seconds.{"\n"}We're extracting audio from YouTube for you.
         </Text>
       </View>
@@ -366,7 +367,7 @@ export default function MusicPlayerScreen({ route, navigation }) {
         ) : null}
         <Text style={{ color: "#fff", fontSize: 16, fontWeight: "700", marginBottom: 4 }}>{displayTitle}</Text>
         <Text style={{ color: "#F87171", fontSize: 14, fontWeight: "700", marginBottom: 8 }}>Audio extraction failed</Text>
-        <Text style={{ color: "#9C97AE", fontSize: 13, textAlign: "center", marginBottom: 24, lineHeight: 20 }}>
+        <Text style={{ color: colors.textSecondary, fontSize: 13, textAlign: "center", marginBottom: 24, lineHeight: 20 }}>
           We tried {MAX_AUTO_RETRIES} times automatically but YouTube blocked the download.{"\n"}{"\n"}You can try again manually or skip this song.
         </Text>
         <TouchableOpacity
@@ -466,7 +467,7 @@ export default function MusicPlayerScreen({ route, navigation }) {
               style={styles.reactionInput}
               multiline
               placeholder="e.g. The bridge at 2:14 completely changes the mood..."
-              placeholderTextColor="#6E6A80"
+              placeholderTextColor={colors.textSecondary}
               value={reaction}
               onChangeText={setReaction}
               onFocus={() => {
@@ -500,43 +501,43 @@ export default function MusicPlayerScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
-  byline: { color: "#B98CFF", fontSize: 14, fontWeight: "700", marginBottom: 16, alignSelf: "flex-start" },
+  container: { flex: 1, backgroundColor: colors.background },
+  byline: { color: colors.primary, fontSize: 14, fontWeight: "700", marginBottom: 16, alignSelf: "flex-start" },
   card: {
-    backgroundColor: "#1E1C2A", borderRadius: 20, padding: 24,
-    width: "100%", alignItems: "center", borderWidth: 1, borderColor: "#2E2B3E",
+    backgroundColor: colors.surface, borderRadius: 20, padding: 24,
+    width: "100%", alignItems: "center", borderWidth: 1, borderColor: colors.surfaceBorder,
   },
   artwork: { width: 260, height: 260, borderRadius: 16, marginBottom: 20 },
-  artworkPlaceholder: { backgroundColor: "#2E2B3E", alignItems: "center", justifyContent: "center" },
+  artworkPlaceholder: { backgroundColor: colors.surfaceBorder, alignItems: "center", justifyContent: "center" },
   trackTitle: { color: "#fff", fontSize: 20, fontWeight: "800", marginBottom: 4, textAlign: "center" },
-  trackArtist: { color: "#9C97AE", fontSize: 14, marginBottom: 20, textAlign: "center" },
+  trackArtist: { color: colors.textSecondary, fontSize: 14, marginBottom: 20, textAlign: "center" },
   progressRow: { flexDirection: "row", alignItems: "center", width: "100%", marginBottom: 20 },
-  progressTrack: { flex: 1, height: 4, backgroundColor: "#2E2B3E", borderRadius: 2, marginHorizontal: 10, overflow: "hidden" },
-  progressFill: { height: "100%", backgroundColor: "#B98CFF", borderRadius: 2 },
-  timeLabel: { color: "#6E6A80", fontSize: 11, fontWeight: "600", minWidth: 32, textAlign: "center" },
-  playPauseBtn: { backgroundColor: "#B98CFF", width: 64, height: 64, borderRadius: 32, alignItems: "center", justifyContent: "center" },
+  progressTrack: { flex: 1, height: 4, backgroundColor: colors.surfaceBorder, borderRadius: 2, marginHorizontal: 10, overflow: "hidden" },
+  progressFill: { height: "100%", backgroundColor: colors.primary, borderRadius: 2 },
+  timeLabel: { color: colors.textSecondary, fontSize: 11, fontWeight: "600", minWidth: 32, textAlign: "center" },
+  playPauseBtn: { backgroundColor: colors.primary, width: 64, height: 64, borderRadius: 32, alignItems: "center", justifyContent: "center" },
   playPauseBtnActive: { backgroundColor: "#fff" },
-  playPauseText: { color: "#12111A", fontSize: 14, fontWeight: "800" },
-  progressBarOuter: { width: "80%", height: 6, backgroundColor: "#2E2B3E", borderRadius: 3, marginTop: 16, overflow: "hidden" },
-  progressBarInner: { height: "100%", backgroundColor: "#B98CFF", borderRadius: 3 },
+  playPauseText: { color: colors.background, fontSize: 14, fontWeight: "800" },
+  progressBarOuter: { width: "80%", height: 6, backgroundColor: colors.surfaceBorder, borderRadius: 3, marginTop: 16, overflow: "hidden" },
+  progressBarInner: { height: "100%", backgroundColor: colors.primary, borderRadius: 3 },
   proofSection: { width: "100%", marginTop: 24 },
   sectionLabel: { color: "#fff", fontWeight: "700", marginBottom: 10, marginTop: 16 },
   stars: { flexDirection: "row", gap: 8 },
-  star: { fontSize: 34, color: "#2E2B3E" },
+  star: { fontSize: 34, color: colors.surfaceBorder },
   starActive: { color: "#FBBF24" },
   reactionInput: {
-    backgroundColor: "#1E1C2A", borderRadius: 12, padding: 14, color: "#fff",
-    minHeight: 90, textAlignVertical: "top", borderWidth: 1, borderColor: "#2E2B3E",
+    backgroundColor: colors.surface, borderRadius: 12, padding: 14, color: "#fff",
+    minHeight: 90, textAlignVertical: "top", borderWidth: 1, borderColor: colors.surfaceBorder,
   },
-  submitBtn: { backgroundColor: "#B98CFF", borderRadius: 14, paddingVertical: 16, alignItems: "center", marginTop: 20 },
-  submitBtnText: { color: "#12111A", fontWeight: "800", fontSize: 16 },
-  hint: { color: "#6E6A80", textAlign: "center", marginTop: 24, fontSize: 13, lineHeight: 20 },
+  submitBtn: { backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 16, alignItems: "center", marginTop: 20 },
+  submitBtnText: { color: colors.background, fontWeight: "800", fontSize: 16 },
+  hint: { color: colors.textSecondary, textAlign: "center", marginTop: 24, fontSize: 13, lineHeight: 20 },
   skipBtn: { alignItems: "center", marginTop: 28, paddingVertical: 10 },
   skipBtnText: { color: "#F87171", fontSize: 13 },
-  completedSection: { width: "100%", alignItems: "center", marginTop: 24, padding: 20, backgroundColor: "#1E1C2A", borderRadius: 16, borderWidth: 1, borderColor: "#2E2B3E" },
+  completedSection: { width: "100%", alignItems: "center", marginTop: 24, padding: 20, backgroundColor: colors.surface, borderRadius: 16, borderWidth: 1, borderColor: colors.surfaceBorder },
   completedIcon: { fontSize: 36, marginBottom: 8 },
   completedTitle: { color: "#4ADE80", fontSize: 16, fontWeight: "700", marginBottom: 4 },
-  completedMeta: { color: "#9C97AE", fontSize: 13, marginBottom: 16 },
-  backBtn: { backgroundColor: "#2E2B3E", borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24 },
+  completedMeta: { color: colors.textSecondary, fontSize: 13, marginBottom: 16 },
+  backBtn: { backgroundColor: colors.surfaceBorder, borderRadius: 12, paddingVertical: 12, paddingHorizontal: 24 },
   backBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
 });

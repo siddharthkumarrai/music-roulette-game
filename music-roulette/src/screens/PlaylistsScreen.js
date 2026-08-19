@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
 import PlaylistItem from "../components/PlaylistItem";
+import { colors } from "../theme/colors";
 
 function formatTime(seconds) {
   if (!seconds || seconds <= 0) return "0:00";
@@ -191,7 +192,7 @@ export default function PlaylistsScreen({ route, navigation }) {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color="#B98CFF" size="large" />
+        <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
   }
@@ -271,8 +272,8 @@ export default function PlaylistsScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
-  center: { flex: 1, backgroundColor: "#12111A", alignItems: "center", justifyContent: "center" },
+  container: { flex: 1, backgroundColor: colors.background },
+  center: { flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center" },
   tabRow: {
     flexDirection: "row",
     paddingHorizontal: 16,
@@ -283,17 +284,17 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     borderRadius: 10,
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   tabActive: {
-    backgroundColor: "#B98CFF",
-    borderColor: "#B98CFF",
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
   },
-  tabText: { color: "#9C97AE", fontWeight: "700", fontSize: 13 },
-  tabTextActive: { color: "#12111A" },
+  tabText: { color: colors.textSecondary, fontWeight: "700", fontSize: 13 },
+  tabTextActive: { color: colors.primary },
   playlistSection: { marginBottom: 24 },
   playlistHeader: {
     flexDirection: "row",
@@ -304,26 +305,26 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     alignItems: "center",
     justifyContent: "center",
     marginRight: 12,
   },
   avatarEmoji: { fontSize: 20 },
   userName: { color: "#fff", fontSize: 16, fontWeight: "700" },
-  songCount: { color: "#9C97AE", fontSize: 12, marginTop: 2 },
+  songCount: { color: colors.textSecondary, fontSize: 12, marginTop: 2 },
   emptyWrap: { alignItems: "center", marginTop: 60 },
   emptyIcon: { fontSize: 48, marginBottom: 12 },
-  emptyText: { color: "#6E6A80", fontSize: 14, textAlign: "center" },
+  emptyText: { color: colors.textSecondary, fontSize: 14, textAlign: "center" },
 
   miniPlayer: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#1A1828",
+    backgroundColor: colors.surface,
     borderTopWidth: 1,
-    borderTopColor: "#2E2B3E",
+    borderTopColor: colors.surfaceBorder,
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 12,
@@ -338,7 +339,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 6,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
   },
   miniThumbPlaceholder: {
     alignItems: "center",
@@ -349,7 +350,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   miniTitle: { color: "#fff", fontSize: 13, fontWeight: "700" },
-  miniArtist: { color: "#9C97AE", fontSize: 11, marginTop: 1 },
+  miniArtist: { color: colors.textSecondary, fontSize: 11, marginTop: 1 },
   miniProgressRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -358,17 +359,17 @@ const styles = StyleSheet.create({
   miniProgressTrack: {
     flex: 1,
     height: 3,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     borderRadius: 1.5,
     overflow: "hidden",
   },
   miniProgressFill: {
     height: "100%",
-    backgroundColor: "#B98CFF",
+    backgroundColor: colors.primary,
     borderRadius: 1.5,
   },
   miniTime: {
-    color: "#6E6A80",
+    color: colors.textSecondary,
     fontSize: 10,
     marginLeft: 6,
     fontWeight: "600",
@@ -383,7 +384,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     alignItems: "center",
     justifyContent: "center",
   },

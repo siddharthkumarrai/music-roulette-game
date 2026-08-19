@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
+import { colors } from "../theme/colors";
 
 export default function JoinRoomScreen({ navigation }) {
   const insets = useSafeAreaInsets();
@@ -45,7 +46,7 @@ export default function JoinRoomScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="ABCD12"
-        placeholderTextColor="#6E6A80"
+        placeholderTextColor={colors.textSecondary}
         value={code}
         onChangeText={(t) => setCode(t.toUpperCase())}
         autoCapitalize="characters"
@@ -61,11 +62,11 @@ export default function JoinRoomScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A", padding: 24, justifyContent: "center" },
+  container: { flex: 1, backgroundColor: colors.background, padding: 24, justifyContent: "center" },
   title: { color: "#fff", fontSize: 26, fontWeight: "800", textAlign: "center", marginBottom: 6 },
-  subtitle: { color: "#9C97AE", fontSize: 13, textAlign: "center", marginBottom: 30 },
+  subtitle: { color: colors.textSecondary, fontSize: 13, textAlign: "center", marginBottom: 30 },
   input: {
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 12,
     paddingHorizontal: 16,
     height: 56,
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
-  btn: { backgroundColor: "#B98CFF", borderRadius: 14, paddingVertical: 16, alignItems: "center" },
-  btnText: { color: "#12111A", fontWeight: "800", fontSize: 16 },
+  btn: { backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 16, alignItems: "center" },
+  btnText: { color: colors.background, fontWeight: "800", fontSize: 16 },
 });

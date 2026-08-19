@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#12111A"
+      "backgroundColor": "#0B1410"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -23,7 +23,7 @@
       "package": "com.siddharthkumarrai.musicroulette",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#12111A"
+        "backgroundColor": "#0B1410"
       },
       "runtimeVersion": {
         "policy": "appVersion"

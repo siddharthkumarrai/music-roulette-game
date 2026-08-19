@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
+import { colors } from "../theme/colors";
 
 const DEADLINE_OPTIONS = [18, 19, 20, 21, 22];
 
@@ -63,7 +64,7 @@ export default function CreateRoomScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="e.g. College Squad, Family Beats..."
-        placeholderTextColor="#6E6A80"
+        placeholderTextColor={colors.textSecondary}
         value={name}
         onChangeText={setName}
       />
@@ -72,7 +73,7 @@ export default function CreateRoomScreen({ navigation }) {
       <TextInput
         style={styles.input}
         placeholder="6"
-        placeholderTextColor="#6E6A80"
+        placeholderTextColor={colors.textSecondary}
         value={maxMembers}
         onChangeText={setMaxMembers}
         keyboardType="number-pad"
@@ -102,25 +103,25 @@ export default function CreateRoomScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
+  container: { flex: 1, backgroundColor: colors.background },
   title: { color: "#fff", fontSize: 26, fontWeight: "800", marginBottom: 6 },
-  subtitle: { color: "#9C97AE", fontSize: 13, marginBottom: 28 },
+  subtitle: { color: colors.textSecondary, fontSize: 13, marginBottom: 28 },
   label: { color: "#fff", fontWeight: "700", marginBottom: 8, marginTop: 4 },
   input: {
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 12,
     paddingHorizontal: 16,
     height: 50,
     color: "#fff",
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   chipRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginBottom: 30 },
-  chip: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 20, backgroundColor: "#1E1C2A", borderWidth: 1, borderColor: "#2E2B3E" },
-  chipActive: { backgroundColor: "#B98CFF", borderColor: "#B98CFF" },
-  chipText: { color: "#9C97AE", fontWeight: "600", fontSize: 13 },
-  chipTextActive: { color: "#12111A" },
-  createBtn: { backgroundColor: "#B98CFF", borderRadius: 14, paddingVertical: 16, alignItems: "center" },
-  createBtnText: { color: "#12111A", fontWeight: "800", fontSize: 16 },
+  chip: { paddingVertical: 10, paddingHorizontal: 14, borderRadius: 20, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.surfaceBorder },
+  chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipText: { color: colors.textSecondary, fontWeight: "600", fontSize: 13 },
+  chipTextActive: { color: colors.background },
+  createBtn: { backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 16, alignItems: "center" },
+  createBtnText: { color: colors.background, fontWeight: "800", fontSize: 16 },
 });

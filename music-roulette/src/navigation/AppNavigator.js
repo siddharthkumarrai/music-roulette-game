@@ -18,21 +18,22 @@ import PlaylistsScreen from "../screens/PlaylistsScreen";
 import RoomRulesScreen from "../screens/RoomRulesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
+import { colors } from "../theme/colors";
 
 const Stack = createNativeStackNavigator();
 
 const screenOptions = {
-  headerStyle: { backgroundColor: "#12111A" },
+  headerStyle: { backgroundColor: colors.background },
   headerTintColor: "#fff",
   headerShadowVisible: false,
-  contentStyle: { backgroundColor: "#12111A" },
+  contentStyle: { backgroundColor: colors.background },
 };
 
 function AuthStack() {
   return (
     <Stack.Navigator screenOptions={{ ...screenOptions, headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} options={{ animation: "slide_from_right" }} />
     </Stack.Navigator>
   );
 }
@@ -80,14 +81,14 @@ export default function AppNavigator() {
 
   if (!onboardingChecked || authLoading) {
     return (
-      <View style={{ flex: 1, backgroundColor: "#12111A", alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator color="#B98CFF" size="large" />
+      <View style={{ flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
   }
 
   return (
-    <NavigationContainer theme={{ colors: { background: "#12111A" } }}>
+    <NavigationContainer theme={{ colors: { background: colors.background } }}>
       {!hasSeenOnboarding ? (
         <OnboardingStack onComplete={() => setHasSeenOnboarding(true)} />
       ) : user ? (

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from "react-nat
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
+import { colors } from "../theme/colors";
 
 export default function RoomRulesScreen({ route }) {
   const insets = useSafeAreaInsets();
@@ -18,7 +19,7 @@ export default function RoomRulesScreen({ route }) {
   if (!group) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color="#B98CFF" size="large" />
+        <ActivityIndicator color={colors.primary} size="large" />
       </View>
     );
   }
@@ -85,18 +86,18 @@ function RuleRow({ icon, label }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
-  center: { flex: 1, backgroundColor: "#12111A", alignItems: "center", justifyContent: "center" },
+  container: { flex: 1, backgroundColor: colors.background },
+  center: { flex: 1, backgroundColor: colors.background, alignItems: "center", justifyContent: "center" },
   heading: { color: "#fff", fontSize: 22, fontWeight: "800", marginBottom: 20 },
   card: {
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
-  cardTitle: { color: "#B98CFF", fontSize: 15, fontWeight: "700", marginBottom: 12 },
+  cardTitle: { color: colors.primary, fontSize: 15, fontWeight: "700", marginBottom: 12 },
   ruleRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -105,5 +106,5 @@ const styles = StyleSheet.create({
   },
   ruleIcon: { fontSize: 18, width: 28, textAlign: "center" },
   ruleLabel: { color: "#D1D0DB", fontSize: 14, flex: 1, lineHeight: 20 },
-  footer: { color: "#6E6A80", fontSize: 12, textAlign: "center", marginTop: 12, marginBottom: 40 },
+  footer: { color: colors.textSecondary, fontSize: 12, textAlign: "center", marginTop: 12, marginBottom: 40 },
 });

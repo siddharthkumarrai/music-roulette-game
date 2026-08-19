@@ -4,6 +4,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { api } from "../config/api";
 import { useAuth } from "../context/AuthContext";
+import { colors } from "../theme/colors";
 
 export default function RoomSettingsScreen({ route }) {
   const insets = useSafeAreaInsets();
@@ -77,20 +78,20 @@ function RuleRow({ label, value }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#12111A" },
-  codeCard: { backgroundColor: "#1E1C2A", borderRadius: 18, padding: 24, alignItems: "center", marginBottom: 28, borderWidth: 1, borderColor: "#2E2B3E" },
-  codeLabel: { color: "#9C97AE", fontSize: 12, marginBottom: 8 },
+  container: { flex: 1, backgroundColor: colors.background },
+  codeCard: { backgroundColor: colors.surface, borderRadius: 18, padding: 24, alignItems: "center", marginBottom: 28, borderWidth: 1, borderColor: colors.surfaceBorder },
+  codeLabel: { color: colors.textSecondary, fontSize: 12, marginBottom: 8 },
   code: { color: "#fff", fontSize: 32, fontWeight: "800", letterSpacing: 6, marginBottom: 16 },
-  shareBtn: { backgroundColor: "#B98CFF", borderRadius: 12, paddingVertical: 10, paddingHorizontal: 24 },
-  shareBtnText: { color: "#12111A", fontWeight: "800" },
+  shareBtn: { backgroundColor: colors.primary, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 24 },
+  shareBtnText: { color: colors.background, fontWeight: "800" },
   sectionTitle: { color: "#fff", fontSize: 17, fontWeight: "700", marginBottom: 12 },
-  memberRow: { flexDirection: "row", alignItems: "center", backgroundColor: "#1E1C2A", borderRadius: 12, padding: 12, marginBottom: 8 },
+  memberRow: { flexDirection: "row", alignItems: "center", backgroundColor: colors.surface, borderRadius: 12, padding: 12, marginBottom: 8 },
   memberEmoji: { fontSize: 20, marginRight: 10 },
   memberName: { color: "#fff", fontWeight: "600", flex: 1 },
-  ownerBadge: { color: "#B98CFF", fontSize: 11, fontWeight: "700" },
-  ruleCard: { backgroundColor: "#1E1C2A", borderRadius: 14, padding: 16, marginTop: 20, marginBottom: 12 },
+  ownerBadge: { color: colors.primary, fontSize: 11, fontWeight: "700" },
+  ruleCard: { backgroundColor: colors.surface, borderRadius: 14, padding: 16, marginTop: 20, marginBottom: 12 },
   ruleRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 8 },
-  ruleLabel: { color: "#9C97AE", fontSize: 13 },
+  ruleLabel: { color: colors.textSecondary, fontSize: 13 },
   ruleValue: { color: "#fff", fontWeight: "700", fontSize: 13 },
-  ownerHint: { color: "#6E6A80", fontSize: 12, textAlign: "center", marginBottom: 20 },
+  ownerHint: { color: colors.textSecondary, fontSize: 12, textAlign: "center", marginBottom: 20 },
 });

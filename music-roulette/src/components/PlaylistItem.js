@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from "react-native";
 import { api } from "../config/api";
+import { colors } from "../theme/colors";
 
 function formatDuration(seconds) {
   if (!seconds || seconds <= 0) return "0:00";
@@ -64,7 +65,7 @@ export default function PlaylistItem({ song, isPlaying, isLoading, onPress }) {
 
       <View style={styles.playBtnWrap}>
         {isLoading ? (
-          <ActivityIndicator size="small" color="#B98CFF" />
+          <ActivityIndicator size="small" color={colors.primary} />
         ) : (
           <View style={[styles.playBtn, isPlaying && styles.playBtnActive]}>
             <Text style={styles.playBtnIcon}>
@@ -81,22 +82,22 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#1E1C2A",
+    backgroundColor: colors.surface,
     borderRadius: 12,
     padding: 10,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: "#2E2B3E",
+    borderColor: colors.surfaceBorder,
   },
   containerActive: {
-    borderColor: "#B98CFF",
+    borderColor: colors.primary,
     backgroundColor: "#251F35",
   },
   thumbnail: {
     width: 52,
     height: 52,
     borderRadius: 8,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
   },
   thumbnailPlaceholder: {
     alignItems: "center",
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   artist: {
-    color: "#9C97AE",
+    color: colors.textSecondary,
     fontSize: 12,
     marginTop: 2,
   },
@@ -123,17 +124,17 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   duration: {
-    color: "#6E6A80",
+    color: colors.textSecondary,
     fontSize: 11,
     fontWeight: "600",
   },
   processing: {
-    color: "#B98CFF",
+    color: colors.primary,
     fontSize: 11,
     fontWeight: "600",
   },
   date: {
-    color: "#6E6A80",
+    color: colors.textSecondary,
     fontSize: 11,
   },
   playBtnWrap: {
@@ -146,12 +147,12 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#2E2B3E",
+    backgroundColor: colors.surfaceBorder,
     alignItems: "center",
     justifyContent: "center",
   },
   playBtnActive: {
-    backgroundColor: "#B98CFF",
+    backgroundColor: colors.primary,
   },
   playBtnIcon: {
     fontSize: 14,
