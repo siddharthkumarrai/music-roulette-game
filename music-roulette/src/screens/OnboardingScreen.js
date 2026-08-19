@@ -1,101 +1,119 @@
 import React, { useState, useRef, useCallback } from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  StatusBar,
+  FlatList,
+  Animated,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  useAnimatedScrollHandler,
-  interpolate,
-  interpolateColor,
-  withSpring,
-  withTiming,
-  runOnJS,
-} from "react-native-reanimated";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const SLIDES = [
   {
     id: "track",
-    gradientColors: ["#FFA940", "#FF7A85"],
+    bg: ["#FFA940", "#FF7A85"],
     icon: "🎵",
     title: "Drop Your Track",
     body: "Share one Song of the Day with your room, every single day.",
   },
   {
     id: "listen",
-    gradientColors: ["#8B5CF6", "#6366F1"],
+    bg: ["#8B5CF6", "#6366F1"],
     icon: "🎧",
     title: "Listen & React",
     body: "Hear every friend's pick in full, rate it, and leave a real reaction.",
   },
   {
     id: "leaderboard",
-    gradientColors: ["#EC4899", "#DB2777"],
+    bg: ["#EC4899", "#DB2777"],
     icon: "🏆",
     title: "Climb the Leaderboard",
     body: "Build streaks, earn points, and win real bragging rights weekly.",
   },
 ];
 
-const AnimatedFlatList = Animated.FlatList;
-
 function PaginationDot({ index, scrollX }) {
-  const width = useAnimatedStyle(() => {
-    const inputRange = [(index - 1) * SCREEN_WIDTH, index * SCREEN_WIDTH, (index + 1) * SCREEN_WIDTH];
-    const w = interpolate(scrollX, inputRange, [6, 18, 6], "clamp");
-    return { width: w };
+  const dotWidth = scrollX.interpolate({
+    inputRange: [
+      (index - 1) * SCREEN_WIDTH,
+      index * SCREEN_WIDTH,
+      (index + 1) * SCREEN_WIDTH,
+    ],
+    outputRange: [6, 18, 6],
+    extrapolate: "clamp",
   });
 
-  const opacity = useAnimatedStyle(() => {
-    const inputRange = [(index - 1) * SCREEN_WIDTH, index * SCREEN_WIDTH, (index + 1) * SCREEN_WIDTH];
-    const o = interpolate(scrollX, inputRange, [0.4, 1, 0.4], "clamp");
-    return { opacity: o };
+  const dotOpacity = scrollX.interpolate({
+    inputRange: [
+      (index - 1) * SCREEN_WIDTH,
+      index * SCREEN_WIDTH,
+      (index + 1) * SCREEN_WIDTH,
+    ],
+    outputRange: [0.4, 1, 0.4],
+    extrapolate: "clamp",
   });
 
   return (
     <Animated.View
-      style={[
-        styles.dot,
-        width,
-        opacity,
-      ]}
+      style={[styles.dot, { width: dotWidth, opacity: dotOpacity }]}
     />
   );
 }
 
 function SlideItem({ item, index, scrollX }) {
-  const inputRange = [(index - 1) * SCREEN_WIDTH, index * SCREEN_WIDTH, (index + 1) * SCREEN_WIDTH];
+  const inputRange = [
+    (index - 1) * SCREEN_WIDTH,
+    index * SCREEN_WIDTH,
+    (index + 1) * SCREEN_WIDTH,
+  ];
 
-  const iconStyle = useAnimatedStyle(() => {
-    const scale = interpolate(scrollX, inputRange, [0.6, 1, 0.6], "clamp");
-    const opacity = interpolate(scrollX, inputRange, [0, 1, 0], "clamp");
-    const translateX = interpolate(scrollX, inputRange, [SCREEN_WIDTH * 0.3, 0, -SCREEN_WIDTH * 0.3], "clamp");
-    return {
-      transform: [{ scale }, { translateX }],
-      opacity,
-    };
+  const iconScale = scrollX.interpolate({
+    inputRange,
+    outputRange: [0.6, 1, 0.6],
+    extrapolate: "clamp",
+  });
+  const iconTranslateX = scrollX.interpolate({
+    inputRange,
+    outputRange: [SCREEN_WIDTH * 0.3, 0, -SCREEN_WIDTH * 0.3],
+    extrapolate: "clamp",
+  });
+  const iconOpacity = scrollX.interpolate({
+    inputRange,
+    outputRange: [0, 1, 0],
+    extrapolate: "clamp",
   });
 
-  const titleStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(scrollX, inputRange, [0, 1, 0], "clamp");
-    const translateY = interpolate(scrollX, inputRange, [12, 0, 12], "clamp");
-    return { opacity, transform: [{ translateY }] };
+  const textOpacity = scrollX.interpolate({
+    inputRange,
+    outputRange: [0, 1, 0],
+    extrapolate: "clamp",
   });
-
-  const bodyStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(scrollX, inputRange, [0, 1, 0], "clamp");
-    const translateY = interpolate(scrollX, inputRange, [12, 0, 12], "clamp");
-    return { opacity, transform: [{ translateY }] };
+  const textTranslateY = scrollX.interpolate({
+    inputRange,
+    outputRange: [12, 0, 12],
+    extrapolate: "clamp",
   });
 
   return (
     <View style={styles.slideContainer}>
       <View style={styles.illustrationArea}>
         <View style={styles.iconBackdrop}>
-          <Animated.Text style={[styles.iconEmoji, iconStyle]}>
+          <Animated.Text
+            style={[
+              styles.iconEmoji,
+              {
+                transform: [{ scale: iconScale }, { translateX: iconTranslateX }],
+                opacity: iconOpacity,
+              },
+            ]}
+          >
             {item.icon}
           </Animated.Text>
         </View>
@@ -108,10 +126,26 @@ function SlideItem({ item, index, scrollX }) {
       </View>
 
       <View style={styles.textArea}>
-        <Animated.Text style={[styles.slideTitle, titleStyle]}>
+        <Animated.Text
+          style={[
+            styles.slideTitle,
+            {
+              opacity: textOpacity,
+              transform: [{ translateY: textTranslateY }],
+            },
+          ]}
+        >
           {item.title}
         </Animated.Text>
-        <Animated.Text style={[styles.slideBody, bodyStyle]}>
+        <Animated.Text
+          style={[
+            styles.slideBody,
+            {
+              opacity: textOpacity,
+              transform: [{ translateY: textTranslateY }],
+            },
+          ]}
+        >
           {item.body}
         </Animated.Text>
       </View>
@@ -121,29 +155,21 @@ function SlideItem({ item, index, scrollX }) {
 
 export default function OnboardingScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const scrollX = useSharedValue(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const bgColors = SLIDES.map((s) => s.bg);
   const flatListRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const onScroll = useAnimatedScrollHandler({
-    onScroll: (event) => {
-      scrollX.value = event.contentOffset.x;
-    },
+  const bgColor = scrollX.interpolate({
+    inputRange: [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
+    outputRange: bgColors,
+    extrapolate: "clamp",
   });
 
   const onMomentumScrollEnd = useCallback((event) => {
     const index = Math.round(event.nativeEvent.contentOffset.x / SCREEN_WIDTH);
     setCurrentIndex(index);
   }, []);
-
-  const backgroundStyle = useAnimatedStyle(() => {
-    const bgColor = interpolateColor(
-      scrollX.value,
-      [0, SCREEN_WIDTH, SCREEN_WIDTH * 2],
-      ["#FFA940", "#8B5CF6", "#EC4899"]
-    );
-    return { backgroundColor: bgColor };
-  });
 
   const handleNext = useCallback(() => {
     if (currentIndex < SLIDES.length - 1) {
@@ -159,32 +185,36 @@ export default function OnboardingScreen({ navigation }) {
     navigation.replace("Login");
   }, [navigation]);
 
-  const handleSkip = useCallback(() => {
-    handleFinish();
-  }, [handleFinish]);
-
   const isLastSlide = currentIndex === SLIDES.length - 1;
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      <Animated.View style={[styles.backgroundLayer, backgroundStyle]}>
+      <Animated.View style={[styles.backgroundLayer, { backgroundColor: bgColor }]}>
         <LinearGradient
           colors={["rgba(255,255,255,0.08)", "transparent"]}
           style={styles.gradientOverlay}
         />
       </Animated.View>
 
-      <View style={[styles.contentContainer, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-        <AnimatedFlatList
+      <View
+        style={[
+          styles.contentContainer,
+          { paddingTop: insets.top, paddingBottom: insets.bottom },
+        ]}
+      >
+        <Animated.FlatList
           ref={flatListRef}
           data={SLIDES}
           keyExtractor={(item) => item.id}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
-          onScroll={onScroll}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            { useNativeDriver: false }
+          )}
           onMomentumScrollEnd={onMomentumScrollEnd}
           scrollEventThrottle={16}
           renderItem={({ item, index }) => (
@@ -193,37 +223,26 @@ export default function OnboardingScreen({ navigation }) {
         />
 
         <View style={[styles.bottomRow, { paddingHorizontal: 24, paddingBottom: 16 }]}>
-          <TouchableOpacity onPress={handleSkip} activeOpacity={0.7}>
-            <AnimatedPressable text="Skip" />
+          <TouchableOpacity
+            onPress={handleFinish}
+            activeOpacity={0.7}
+            style={styles.buttonRow}
+          >
+            <Text style={styles.buttonText}>Skip</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={isLastSlide ? handleFinish : handleNext}
             activeOpacity={0.7}
+            style={styles.buttonRow}
           >
-            <AnimatedPressable
-              text={isLastSlide ? "Get Started" : "Next"}
-              showArrow
-            />
+            <Text style={styles.buttonText}>
+              {isLastSlide ? "Get Started" : "Next"} →
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
     </View>
-  );
-}
-
-function AnimatedPressable({ text, showArrow }) {
-  const scale = useSharedValue(1);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  return (
-    <Animated.View style={[styles.buttonRow, animatedStyle]}>
-      <Text style={styles.buttonText}>{text}</Text>
-      {showArrow && <Text style={styles.arrowText}> →</Text>}
-    </Animated.View>
   );
 }
 
@@ -237,7 +256,6 @@ const styles = StyleSheet.create({
   },
   gradientOverlay: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 0,
   },
   contentContainer: {
     flex: 1,
@@ -310,11 +328,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  arrowText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "700",
