@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ActivityIndicator, View } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAuth } from "../context/AuthContext";
 
 import LoginScreen from "../screens/LoginScreen";
@@ -16,6 +17,7 @@ import LeaderboardScreen from "../screens/LeaderboardScreen";
 import PlaylistsScreen from "../screens/PlaylistsScreen";
 import RoomRulesScreen from "../screens/RoomRulesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import OnboardingScreen from "../screens/OnboardingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,10 +58,27 @@ function MainStack() {
   );
 }
 
-export default function AppNavigator() {
-  const { user, loading } = useAuth();
+function OnboardingStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+    </Stack.Navigator>
+  );
+}
 
-  if (loading) {
+export default function AppNavigator() {
+  const { user, loading: authLoading } = useAuth();
+  const [onboardingChecked, setOnboardingChecked] = useState(false);
+  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
+
+  useEffect(() => {
+    AsyncStorage.getItem("has_seen_onboarding").then((val) => {
+      setHasSeenOnboarding(val === "true");
+      setOnboardingChecked(true);
+    });
+  }, []);
+
+  if (!onboardingChecked || authLoading) {
     return (
       <View style={{ flex: 1, backgroundColor: "#12111A", alignItems: "center", justifyContent: "center" }}>
         <ActivityIndicator color="#B98CFF" size="large" />
@@ -69,7 +88,13 @@ export default function AppNavigator() {
 
   return (
     <NavigationContainer theme={{ colors: { background: "#12111A" } }}>
-      {user ? <MainStack /> : <AuthStack />}
+      {!hasSeenOnboarding ? (
+        <OnboardingStack />
+      ) : user ? (
+        <MainStack />
+      ) : (
+        <AuthStack />
+      )}
     </NavigationContainer>
   );
 }
