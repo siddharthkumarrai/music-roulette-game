@@ -10,37 +10,22 @@ import {
   Platform,
   Animated,
   StatusBar,
-  Dimensions,
-  ActivityIndicator,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react-native";
 import { useAuth } from "../context/AuthContext";
 import { colors } from "../theme/colors";
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const ND = false;
 
-function AnimatedSpinner({ size = 20, color = colors.background }) {
-  const rotation = useRef(new Animated.Value(0)).current;
-
+function Spinner({ size = 20, color = colors.background }) {
+  const r = useRef(new Animated.Value(0)).current;
   useEffect(() => {
-    Animated.loop(
-      Animated.timing(rotation, {
-        toValue: 1,
-        duration: 900,
-        useNativeDriver: true,
-      })
-    ).start();
+    Animated.loop(Animated.timing(r, { toValue: 1, duration: 900, useNativeDriver: ND })).start();
   }, []);
-
-  const spin = rotation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ["0deg", "360deg"],
-  });
-
   return (
-    <Animated.View style={{ transform: [{ rotate: spin }] }}>
-      <ActivityIndicator size={size} color={color} />
+    <Animated.View style={{ transform: [{ rotate: r.interpolate({ inputRange: [0, 1], outputRange: ["0deg", "360deg"] }) }] }}>
+      <View style={{ width: size, height: size, borderRadius: size / 2, borderWidth: 2, borderColor: color, borderTopColor: "transparent" }} />
     </Animated.View>
   );
 }
@@ -54,107 +39,70 @@ export default function LoginScreen({ navigation }) {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
-
   const emailBorder = useRef(new Animated.Value(0)).current;
   const passwordBorder = useRef(new Animated.Value(0)).current;
-  const passwordIconOpacity = useRef(new Animated.Value(1)).current;
   const emailScale = useRef(new Animated.Value(1)).current;
   const passwordScale = useRef(new Animated.Value(1)).current;
-
+  const passwordIconOp = useRef(new Animated.Value(1)).current;
   const shakeAnim = useRef(new Animated.Value(0)).current;
 
-  const logoOpacity = useRef(new Animated.Value(0)).current;
+  const logoOp = useRef(new Animated.Value(0)).current;
   const logoScale = useRef(new Animated.Value(0.8)).current;
-  const titleOpacity = useRef(new Animated.Value(0)).current;
-  const titleTranslateY = useRef(new Animated.Value(10)).current;
-  const subtitleOpacity = useRef(new Animated.Value(0)).current;
-  const subtitleTranslateY = useRef(new Animated.Value(10)).current;
-
-  const input1Opacity = useRef(new Animated.Value(0)).current;
-  const input1TranslateY = useRef(new Animated.Value(10)).current;
-  const input2Opacity = useRef(new Animated.Value(0)).current;
-  const input2TranslateY = useRef(new Animated.Value(10)).current;
-
-  const checkRowOpacity = useRef(new Animated.Value(0)).current;
-  const checkRowTranslateY = useRef(new Animated.Value(10)).current;
-
-  const btnOpacity = useRef(new Animated.Value(0)).current;
-  const btnTranslateY = useRef(new Animated.Value(10)).current;
-  const socialOpacity = useRef(new Animated.Value(0)).current;
-  const socialTranslateY = useRef(new Animated.Value(10)).current;
-  const footerOpacity = useRef(new Animated.Value(0)).current;
-
+  const titleOp = useRef(new Animated.Value(0)).current;
+  const titleY = useRef(new Animated.Value(10)).current;
+  const subOp = useRef(new Animated.Value(0)).current;
+  const subY = useRef(new Animated.Value(10)).current;
+  const in1Op = useRef(new Animated.Value(0)).current;
+  const in1Y = useRef(new Animated.Value(10)).current;
+  const in2Op = useRef(new Animated.Value(0)).current;
+  const in2Y = useRef(new Animated.Value(10)).current;
+  const ckOp = useRef(new Animated.Value(0)).current;
+  const ckY = useRef(new Animated.Value(10)).current;
+  const btnOp = useRef(new Animated.Value(0)).current;
+  const btnY = useRef(new Animated.Value(10)).current;
+  const socOp = useRef(new Animated.Value(0)).current;
+  const socY = useRef(new Animated.Value(10)).current;
+  const footOp = useRef(new Animated.Value(0)).current;
   const btnScale = useRef(new Animated.Value(1)).current;
-  const googleScale = useRef(new Animated.Value(1)).current;
-  const appleScale = useRef(new Animated.Value(1)).current;
+  const gScale = useRef(new Animated.Value(1)).current;
+  const aScale = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    const stagger = (anim, translateY, delay) =>
-      Animated.parallel([
-        Animated.timing(anim, { toValue: 1, duration: 350, useNativeDriver: true }),
-        Animated.timing(translateY, { toValue: 0, duration: 350, useNativeDriver: true }),
-      ]);
-
+    const s = (o, y) => Animated.parallel([
+      Animated.timing(o, { toValue: 1, duration: 350, useNativeDriver: ND }),
+      Animated.timing(y, { toValue: 0, duration: 350, useNativeDriver: ND }),
+    ]);
     Animated.sequence([
       Animated.parallel([
-        Animated.timing(logoOpacity, { toValue: 1, duration: 300, useNativeDriver: true }),
-        Animated.spring(logoScale, { toValue: 1, friction: 7, useNativeDriver: true }),
+        Animated.timing(logoOp, { toValue: 1, duration: 300, useNativeDriver: ND }),
+        Animated.spring(logoScale, { toValue: 1, friction: 7, useNativeDriver: ND }),
       ]),
-      stagger(titleOpacity, titleTranslateY, 0),
-      Animated.delay(40),
-      stagger(subtitleOpacity, subtitleTranslateY, 0),
-      Animated.delay(40),
-      stagger(input1Opacity, input1TranslateY, 0),
-      Animated.delay(60),
-      stagger(input2Opacity, input2TranslateY, 0),
-      Animated.delay(40),
-      stagger(checkRowOpacity, checkRowTranslateY, 0),
-      Animated.delay(40),
-      stagger(btnOpacity, btnTranslateY, 0),
-      Animated.delay(40),
-      stagger(socialOpacity, socialTranslateY, 0),
-      Animated.delay(40),
-      Animated.timing(footerOpacity, { toValue: 1, duration: 300, useNativeDriver: true }),
+      s(titleOp, titleY), Animated.delay(40),
+      s(subOp, subY), Animated.delay(40),
+      s(in1Op, in1Y), Animated.delay(60),
+      s(in2Op, in2Y), Animated.delay(40),
+      s(ckOp, ckY), Animated.delay(40),
+      s(btnOp, btnY), Animated.delay(40),
+      s(socOp, socY), Animated.delay(40),
+      Animated.timing(footOp, { toValue: 1, duration: 300, useNativeDriver: ND }),
     ]).start();
   }, []);
 
-  const animateInput = (borderVal, scaleVal, toFocus) => {
+  const focusAnim = (bv, sv, toFocus) => {
     Animated.parallel([
-      Animated.timing(borderVal, {
-        toValue: toFocus ? 1 : 0,
-        duration: 150,
-        useNativeDriver: false,
-      }),
-      Animated.timing(scaleVal, {
-        toValue: toFocus ? 1.01 : 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
+      Animated.timing(bv, { toValue: toFocus ? 1 : 0, duration: 150, useNativeDriver: ND }),
+      Animated.timing(sv, { toValue: toFocus ? 1.01 : 1, duration: 150, useNativeDriver: ND }),
     ]).start();
   };
 
   const triggerShake = () => {
     Animated.sequence([
-      Animated.timing(shakeAnim, { toValue: 6, duration: 40, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: -6, duration: 40, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: 4, duration: 40, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: -4, duration: 40, useNativeDriver: true }),
-      Animated.timing(shakeAnim, { toValue: 0, duration: 50, useNativeDriver: true }),
+      Animated.timing(shakeAnim, { toValue: 6, duration: 40, useNativeDriver: ND }),
+      Animated.timing(shakeAnim, { toValue: -6, duration: 40, useNativeDriver: ND }),
+      Animated.timing(shakeAnim, { toValue: 4, duration: 40, useNativeDriver: ND }),
+      Animated.timing(shakeAnim, { toValue: -4, duration: 40, useNativeDriver: ND }),
+      Animated.timing(shakeAnim, { toValue: 0, duration: 50, useNativeDriver: ND }),
     ]).start();
-  };
-
-  const animatePasswordIcon = (toVisible) => {
-    Animated.sequence([
-      Animated.timing(passwordIconOpacity, { toValue: 0, duration: 60, useNativeDriver: true }),
-      Animated.timing(passwordIconOpacity, { toValue: 1, duration: 60, useNativeDriver: true }),
-    ]).start();
-  };
-
-  const handleTogglePassword = () => {
-    animatePasswordIcon(!showPassword);
-    setShowPassword(!showPassword);
   };
 
   const handleLogin = async () => {
@@ -174,67 +122,35 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
-  const pressIn = (scaleVal) => {
-    Animated.timing(scaleVal, { toValue: 0.96, duration: 80, useNativeDriver: true }).start();
-  };
-  const pressOut = (scaleVal) => {
-    Animated.spring(scaleVal, { toValue: 1, friction: 4, useNativeDriver: true }).start();
-  };
+  const pressIn = (sv) => Animated.timing(sv, { toValue: 0.96, duration: 80, useNativeDriver: ND }).start();
+  const pressOut = (sv) => Animated.spring(sv, { toValue: 1, friction: 4, useNativeDriver: ND }).start();
 
-  const emailBorderColor = emailBorder.interpolate({
-    inputRange: [0, 1],
-    outputRange: [colors.surfaceBorder, colors.primary],
-  });
-  const passwordBorderColor = passwordBorder.interpolate({
-    inputRange: [0, 1],
-    outputRange: [colors.surfaceBorder, colors.primary],
-  });
+  const ebC = emailBorder.interpolate({ inputRange: [0, 1], outputRange: [colors.surfaceBorder, colors.primary] });
+  const pbC = passwordBorder.interpolate({ inputRange: [0, 1], outputRange: [colors.surfaceBorder, colors.primary] });
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-      >
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
         <View style={[styles.inner, { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 16 }]}>
-          <TouchableOpacity
-            style={[styles.backBtn, { marginTop: 8 }]}
-            onPress={() => navigation.goBack()}
-            activeOpacity={0.7}
-          >
+          <TouchableOpacity style={[styles.backBtn, { marginTop: 8 }]} onPress={() => navigation.goBack()} activeOpacity={0.7}>
             <ArrowLeft size={20} color={colors.textPrimary} />
           </TouchableOpacity>
 
           <View style={styles.logoSection}>
-            <Animated.View style={[styles.logoMark, { opacity: logoOpacity, transform: [{ scale: logoScale }] }]}>
+            <Animated.View style={[styles.logoMark, { opacity: logoOp, transform: [{ scale: logoScale }] }]}>
               <Text style={styles.logoEmoji}>🎵</Text>
             </Animated.View>
-            <Animated.Text style={[styles.wordmark, { opacity: logoOpacity, transform: [{ scale: logoScale }] }]}>
-              Music Roulette
-            </Animated.Text>
+            <Animated.Text style={[styles.wordmark, { opacity: logoOp, transform: [{ scale: logoScale }] }]}>Music Roulette</Animated.Text>
           </View>
 
           <View style={styles.headingSection}>
-            <Animated.Text
-              style={[styles.welcomeTitle, { opacity: titleOpacity, transform: [{ translateY: titleTranslateY }] }]}
-            >
-              Welcome back
-            </Animated.Text>
-            <Animated.Text
-              style={[styles.welcomeSub, { opacity: subtitleOpacity, transform: [{ translateY: subtitleTranslateY }] }]}
-            >
-              Log in to your rooms
-            </Animated.Text>
+            <Animated.Text style={[styles.welcomeTitle, { opacity: titleOp, transform: [{ translateY: titleY }] }]}>Welcome back</Animated.Text>
+            <Animated.Text style={[styles.welcomeSub, { opacity: subOp, transform: [{ translateY: subY }] }]}>Log in to your rooms</Animated.Text>
           </View>
 
-          <Animated.View
-            style={{
-              opacity: input1Opacity,
-              transform: [{ translateY: input1TranslateY }, { translateX: shakeAnim }],
-            }}
-          >
-            <Animated.View style={[styles.inputRow, { borderColor: emailBorderColor, transform: [{ scale: emailScale }] }]}>
+          <Animated.View style={{ opacity: in1Op, transform: [{ translateY: in1Y }, { translateX: shakeAnim }] }}>
+            <Animated.View style={[styles.inputRow, { borderColor: ebC, transform: [{ scale: emailScale }] }]}>
               <Mail size={18} color={colors.textSecondary} style={styles.inputIcon} />
               <TextInput
                 style={styles.input}
@@ -244,19 +160,14 @@ export default function LoginScreen({ navigation }) {
                 onChangeText={setEmail}
                 autoCapitalize="none"
                 keyboardType="email-address"
-                onFocus={() => { setEmailFocused(true); animateInput(emailBorder, emailScale, true); }}
-                onBlur={() => { setEmailFocused(false); animateInput(emailBorder, emailScale, false); }}
+                onFocus={() => focusAnim(emailBorder, emailScale, true)}
+                onBlur={() => focusAnim(emailBorder, emailScale, false)}
               />
             </Animated.View>
           </Animated.View>
 
-          <Animated.View
-            style={{
-              opacity: input2Opacity,
-              transform: [{ translateY: input2TranslateY }, { translateX: shakeAnim }],
-            }}
-          >
-            <Animated.View style={[styles.inputRow, { borderColor: passwordBorderColor, transform: [{ scale: passwordScale }] }]}>
+          <Animated.View style={{ opacity: in2Op, transform: [{ translateY: in2Y }, { translateX: shakeAnim }] }}>
+            <Animated.View style={[styles.inputRow, { borderColor: pbC, transform: [{ scale: passwordScale }] }]}>
               <Lock size={18} color={colors.textSecondary} style={styles.inputIcon} />
               <TextInput
                 style={[styles.input, { flex: 1 }]}
@@ -265,27 +176,29 @@ export default function LoginScreen({ navigation }) {
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={!showPassword}
-                onFocus={() => { setPasswordFocused(true); animateInput(passwordBorder, passwordScale, true); }}
-                onBlur={() => { setPasswordFocused(false); animateInput(passwordBorder, passwordScale, false); }}
+                onFocus={() => focusAnim(passwordBorder, passwordScale, true)}
+                onBlur={() => focusAnim(passwordBorder, passwordScale, false)}
               />
-              <TouchableOpacity onPress={handleTogglePassword} style={styles.eyeBtn} activeOpacity={0.6}>
-                <Animated.View style={{ opacity: passwordIconOpacity }}>
-                  {showPassword ? (
-                    <EyeOff size={18} color={colors.textSecondary} />
-                  ) : (
-                    <Eye size={18} color={colors.textSecondary} />
-                  )}
+              <TouchableOpacity
+                onPress={() => {
+                  Animated.sequence([
+                    Animated.timing(passwordIconOp, { toValue: 0, duration: 60, useNativeDriver: ND }),
+                    Animated.timing(passwordIconOp, { toValue: 1, duration: 60, useNativeDriver: ND }),
+                  ]).start();
+                  setShowPassword(!showPassword);
+                }}
+                style={styles.eyeBtn}
+                activeOpacity={0.6}
+              >
+                <Animated.View style={{ opacity: passwordIconOp }}>
+                  {showPassword ? <EyeOff size={18} color={colors.textSecondary} /> : <Eye size={18} color={colors.textSecondary} />}
                 </Animated.View>
               </TouchableOpacity>
             </Animated.View>
           </Animated.View>
 
-          <Animated.View style={[styles.checkRow, { opacity: checkRowOpacity, transform: [{ translateY: checkRowTranslateY }] }]}>
-            <TouchableOpacity
-              style={styles.rememberRow}
-              onPress={() => setRememberMe(!rememberMe)}
-              activeOpacity={0.7}
-            >
+          <Animated.View style={[styles.checkRow, { opacity: ckOp, transform: [{ translateY: ckY }] }]}>
+            <TouchableOpacity style={styles.rememberRow} onPress={() => setRememberMe(!rememberMe)} activeOpacity={0.7}>
               <View style={[styles.checkbox, rememberMe && styles.checkboxActive]}>
                 {rememberMe && <Text style={styles.checkMark}>✓</Text>}
               </View>
@@ -296,59 +209,41 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </Animated.View>
 
-          <Animated.View style={{ opacity: btnOpacity, transform: [{ translateY: btnTranslateY }] }}>
-            <TouchableOpacity
-              style={styles.loginBtn}
-              onPress={handleLogin}
-              disabled={loading}
-              activeOpacity={0.8}
-              onPressIn={() => pressIn(btnScale)}
-              onPressOut={() => pressOut(btnScale)}
-            >
+          <Animated.View style={{ opacity: btnOp, transform: [{ translateY: btnY }] }}>
+            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin} disabled={loading} activeOpacity={0.8}
+              onPressIn={() => pressIn(btnScale)} onPressOut={() => pressOut(btnScale)}>
               <Animated.View style={[styles.loginBtnInner, { transform: [{ scale: btnScale }] }]}>
-                {loading ? (
-                  <AnimatedSpinner size={20} color={colors.background} />
-                ) : (
-                  <Text style={styles.loginBtnText}>Log In</Text>
-                )}
+                {loading ? <Spinner size={20} color={colors.background} /> : <Text style={styles.loginBtnText}>Log In</Text>}
               </Animated.View>
             </TouchableOpacity>
           </Animated.View>
 
-          <Animated.View style={[styles.dividerRow, { opacity: socialOpacity, transform: [{ translateY: socialTranslateY }] }]}>
+          <Animated.View style={[styles.dividerRow, { opacity: socOp, transform: [{ translateY: socY }] }]}>
             <View style={styles.dividerLine} />
             <Text style={styles.dividerText}>Or Continue With</Text>
             <View style={styles.dividerLine} />
           </Animated.View>
 
-          <Animated.View style={[styles.socialRow, { opacity: socialOpacity, transform: [{ translateY: socialTranslateY }] }]}>
-            <TouchableOpacity
-              style={styles.socialBtn}
-              activeOpacity={0.8}
-              onPressIn={() => pressIn(googleScale)}
-              onPressOut={() => pressOut(googleScale)}
-              onPress={() => Alert.alert("Coming soon", "Social login isn't set up yet.")}
-            >
-              <Animated.View style={[styles.socialBtnInner, { transform: [{ scale: googleScale }] }]}>
+          <Animated.View style={[styles.socialRow, { opacity: socOp, transform: [{ translateY: socY }] }]}>
+            <TouchableOpacity style={styles.socialBtn} activeOpacity={0.8}
+              onPressIn={() => pressIn(gScale)} onPressOut={() => pressOut(gScale)}
+              onPress={() => Alert.alert("Coming soon", "Social login isn't set up yet.")}>
+              <Animated.View style={[styles.socialBtnInner, { transform: [{ scale: gScale }] }]}>
                 <Text style={styles.socialIcon}>G</Text>
                 <Text style={styles.socialLabel}>Google</Text>
               </Animated.View>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.socialBtn}
-              activeOpacity={0.8}
-              onPressIn={() => pressIn(appleScale)}
-              onPressOut={() => pressOut(appleScale)}
-              onPress={() => Alert.alert("Coming soon", "Social login isn't set up yet.")}
-            >
-              <Animated.View style={[styles.socialBtnInner, { transform: [{ scale: appleScale }] }]}>
+            <TouchableOpacity style={styles.socialBtn} activeOpacity={0.8}
+              onPressIn={() => pressIn(aScale)} onPressOut={() => pressOut(aScale)}
+              onPress={() => Alert.alert("Coming soon", "Social login isn't set up yet.")}>
+              <Animated.View style={[styles.socialBtnInner, { transform: [{ scale: aScale }] }]}>
                 <Text style={styles.socialIcon}>🍎</Text>
                 <Text style={styles.socialLabel}>Apple</Text>
               </Animated.View>
             </TouchableOpacity>
           </Animated.View>
 
-          <Animated.View style={[styles.footer, { opacity: footerOpacity }]}>
+          <Animated.View style={[styles.footer, { opacity: footOp }]}>
             <Text style={styles.footerText}>Don't have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate("Register")} activeOpacity={0.7}>
               <Text style={styles.footerLink}>Sign up</Text>
@@ -363,93 +258,34 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   inner: { flex: 1, paddingHorizontal: 24 },
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: colors.primaryMuted,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: colors.primaryMuted, alignItems: "center", justifyContent: "center" },
   logoSection: { alignItems: "center", marginTop: 28 },
-  logoMark: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: colors.primaryMuted,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
+  logoMark: { width: 72, height: 72, borderRadius: 36, backgroundColor: colors.primaryMuted, alignItems: "center", justifyContent: "center", marginBottom: 12 },
   logoEmoji: { fontSize: 36 },
   wordmark: { color: colors.primary, fontSize: 24, fontWeight: "800" },
   headingSection: { alignItems: "center", marginTop: 28, marginBottom: 24 },
   welcomeTitle: { color: colors.textPrimary, fontSize: 22, fontWeight: "800", marginBottom: 6 },
   welcomeSub: { color: colors.textSecondary, fontSize: 14 },
-  inputRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    borderWidth: 1.5,
-    paddingHorizontal: 14,
-    height: 54,
-    marginBottom: 14,
-  },
+  inputRow: { flexDirection: "row", alignItems: "center", backgroundColor: colors.surface, borderRadius: 14, borderWidth: 1.5, paddingHorizontal: 14, height: 54, marginBottom: 14 },
   inputIcon: { marginRight: 12 },
   input: { flex: 1, color: colors.textPrimary, fontSize: 15, height: "100%" },
   eyeBtn: { padding: 4, marginLeft: 8 },
-  checkRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-    marginTop: 2,
-  },
+  checkRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24, marginTop: 2 },
   rememberRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 6,
-    borderWidth: 1.5,
-    borderColor: colors.surfaceBorder,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  checkbox: { width: 20, height: 20, borderRadius: 6, borderWidth: 1.5, borderColor: colors.surfaceBorder, alignItems: "center", justifyContent: "center" },
   checkboxActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   checkMark: { color: colors.background, fontSize: 12, fontWeight: "800" },
   rememberText: { color: colors.textSecondary, fontSize: 13 },
   forgotText: { color: colors.primary, fontSize: 13, fontWeight: "600" },
   loginBtn: { marginBottom: 24 },
-  loginBtnInner: {
-    backgroundColor: colors.primary,
-    borderRadius: 14,
-    height: 54,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  loginBtnInner: { backgroundColor: colors.primary, borderRadius: 14, height: 54, alignItems: "center", justifyContent: "center" },
   loginBtnText: { color: colors.background, fontWeight: "800", fontSize: 16 },
-  dividerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    marginBottom: 20,
-  },
+  dividerRow: { flexDirection: "row", alignItems: "center", gap: 12, marginBottom: 20 },
   dividerLine: { flex: 1, height: 1, backgroundColor: colors.surfaceBorder },
   dividerText: { color: colors.textSecondary, fontSize: 12, fontWeight: "500" },
   socialRow: { flexDirection: "row", gap: 12, marginBottom: 28 },
   socialBtn: { flex: 1 },
-  socialBtnInner: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    height: 50,
-    borderWidth: 1,
-    borderColor: colors.surfaceBorder,
-  },
+  socialBtnInner: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: colors.surface, borderRadius: 14, height: 50, borderWidth: 1, borderColor: colors.surfaceBorder },
   socialIcon: { fontSize: 16, fontWeight: "700", color: colors.textPrimary },
   socialLabel: { color: colors.textPrimary, fontSize: 14, fontWeight: "600" },
   footer: { flexDirection: "row", justifyContent: "center", alignItems: "center" },
