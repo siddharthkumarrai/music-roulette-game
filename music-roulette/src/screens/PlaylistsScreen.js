@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
   },
   tabText: { color: colors.textSecondary, fontWeight: "700", fontSize: 13 },
-  tabTextActive: { color: colors.primary },
+  tabTextActive: { color: colors.background },
   playlistSection: { marginBottom: 24 },
   playlistHeader: {
     flexDirection: "row",

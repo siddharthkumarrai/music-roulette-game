@@ -569,7 +569,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "#1A1828",
+    backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.surfaceBorder,
     flexDirection: "row",
