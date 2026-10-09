@@ -3,6 +3,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
+const mongoose = require("mongoose");
 
 const authRoutes = require("./routes/authRoutes");
 const groupRoutes = require("./routes/groupRoutes");
@@ -46,7 +47,15 @@ app.get("/health", (req, res) => res.json({ status: "ok", time: new Date().toISO
 // =======================================================
 // RENDER.COM HEALTH CHECK ROUTE (Server ko zinda rakhne ke liye)
 // =======================================================
-app.get("/render-alive", (req, res) => {
+app.get("/render-alive", async (req, res) => {
+    try {
+        if (mongoose.connection.readyState === 1) {
+            await mongoose.connection.db.admin().ping();
+        }
+    } catch (error) {
+        console.error("MongoDB ping failed:", error);
+    }
+
     const now = new Date();
     const pad = (n) => String(n).padStart(2, "0");
     const padMs = (n) => String(n).padStart(3, "0");

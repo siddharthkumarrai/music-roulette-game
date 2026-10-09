@@ -20,36 +20,113 @@ Listen. Rate. Compete. Discover music together.
 
 ---
 
-## 📱 Live Demo
+## 🎬 App Demo
 
-[![Watch Demo Video](https://res.cloudinary.com/YOUR_CLOUD_NAME/video/upload/v1/music-roulette/demo-thumbnail.jpg)](https://res.cloudinary.com/YOUR_CLOUD_NAME/video/upload/v1/music-roulette/demo-video.mp4)
+<div align="center">
+  <video width="320" controls autoplay loop muted playsinline>
+    <source src="https://res.cloudinary.com/dombv2xju/video/upload/v1791531633/music-roulte/Demo_Video_Music_Roulte_Game_Siddharth_Kumar_Rai_2_rxiwmp.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
-> Click the image to watch the full demo
+<p align="center">
+  <a href="https://github.com/siddharthkumarrai/music-roulette-game/releases/latest">
+    <img src="https://img.shields.io/badge/Download%20Android%20APK-Latest%20Release-34A853?style=for-the-badge&logo=android&logoColor=white" alt="Download the latest Android APK">
+  </a>
+</p>
 
 ---
 
-## 📸 Screenshots
+## 📸 App Showcase
+
+### 🔐 Authentication & Onboarding
 
 <table>
   <tr>
-    <td align="center"><strong>Login</strong></td>
-    <td align="center"><strong>Rooms List</strong></td>
-    <td align="center"><strong>Room Dashboard</strong></td>
+    <td align="center"><strong>Welcome & Onboarding</strong></td>
+    <td align="center"><strong>Sign In</strong></td>
   </tr>
   <tr>
-    <td><img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/music-roulette/screen-login.png" width="250" /></td>
-    <td><img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/music-roulette/screen-rooms.png" width="250" /></td>
-    <td><img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/music-roulette/screen-room.png" width="250" /></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530358/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.43_oucxrz.jpg" width="220" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette onboarding screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530358/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.43_1_ve7914.jpg" width="220" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette authentication screen"></td>
+  </tr>
+</table>
+
+### 🎯 Core Gameplay & Roulette
+
+<table>
+  <tr>
+    <td align="center"><strong>Daily Game</strong></td>
+    <td align="center"><strong>Roulette Selection</strong></td>
+    <td align="center"><strong>Song Details</strong></td>
   </tr>
   <tr>
-    <td align="center"><strong>Music Player</strong></td>
-    <td align="center"><strong>Leaderboard</strong></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530359/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.44_2_xyamp6.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette daily game screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530359/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.44_yxoupr.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette roulette screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530359/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.44_1_hik36g.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette song details screen"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Leaderboard & Results</strong></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530359/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.45_ff25jc.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette leaderboard and results screen"></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+### 🎶 Playlists & Music Discovery
+
+<table>
+  <tr>
+    <td align="center"><strong>Playlist Home</strong></td>
+    <td align="center"><strong>Music Discovery</strong></td>
+    <td align="center"><strong>Playlist Details</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530359/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.41_lyczel.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette playlist home screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530359/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.47_1_e3b3o9.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette music discovery screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530360/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.46_geocb1.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette playlist details screen"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Now Playing</strong></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530360/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.46_1_aol2ch.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette now playing screen"></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+### 👥 Multiplayer Rooms & Social Features
+
+<table>
+  <tr>
+    <td align="center"><strong>Room List</strong></td>
+    <td align="center"><strong>Room Lobby</strong></td>
+    <td align="center"><strong>Group Activity</strong></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530360/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.47_zpiwvf.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette room list screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530360/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.47_2_l4aagj.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette multiplayer room screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530360/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.48_2_oznvov.jpg" width="210" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette social features screen"></td>
+  </tr>
+</table>
+
+### ⚙️ Profile & Settings
+
+<table>
+  <tr>
     <td align="center"><strong>Profile</strong></td>
+    <td align="center"><strong>Room & App Settings</strong></td>
   </tr>
   <tr>
-    <td><img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/music-roulette/screen-player.png" width="250" /></td>
-    <td><img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/music-roulette/screen-leaderboard.png" width="250" /></td>
-    <td><img src="https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/music-roulette/screen-profile.png" width="250" /></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530361/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.48_1_mthur8.jpg" width="220" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette profile screen"></td>
+    <td align="center"><img src="https://res.cloudinary.com/dombv2xju/image/upload/v1791530361/music-roulte/WhatsApp_Image_2026-10-09_at_12.46.48_valee0.jpg" width="220" style="border-radius:16px;border:1px solid #30363d" alt="Music Roulette settings screen"></td>
   </tr>
 </table>
 
