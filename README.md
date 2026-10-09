@@ -14,7 +14,7 @@ Listen. Rate. Compete. Discover music together.
 
 ---
 
-![App Banner](https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/v1/music-roulette/banner.png)
+![Music Roulette app demo banner](https://res.cloudinary.com/dombv2xju/image/upload/v1791533704/DemoVideoMusicRoulteGameSiddharthKumarRai2-ezgif.com-optimize_1_m6jvxl.gif)
 
 </div>
 
