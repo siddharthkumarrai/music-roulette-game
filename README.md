@@ -90,6 +90,10 @@ Yahan app ka dynamic video walkthrough dekh sakte hain:
   </video>
 </div>
 
+Direct video link:
+
+[Watch the app demo video](https://res.cloudinary.com/dombv2xju/video/upload/v1791531633/music-roulte/Demo_Video_Music_Roulte_Game_Siddharth_Kumar_Rai_2_rxiwmp.mp4)
+
 ---
 
 ## 🎮 What is Music Roulette?
